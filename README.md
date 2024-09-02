@@ -1,2 +1,2 @@
 # easyOSINT
-My ALX Graduation Portfolio Project Repository
+My ALX Specialization Portfolio Project
