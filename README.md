@@ -1,2 +1,2 @@
 # easyOSINT
-My ALX Specialization Portfolio Project
+My ALX WebStack Specialization Portfolio
