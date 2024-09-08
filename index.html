@@ -5,7 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="easyOSINT">
         <title>easyOSINT</title>
-        <link href="img/logo_trial.png" rel="icon" type="image/x-icon">
+        <!-- Link to Font Awesome CDN for icons -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link href="img/logo_trial.png" rel="icon" type="image/x-icon" style="border-radius:30%">
         <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,6 +15,17 @@
         <div class="logo">
             <img src="img/logo_trial.png" alt="Logo">
         </div>
+
+        <nav class="nav-links">
+            <a href="#" class="nav-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <hr>
+            <a href="#" class="nav-item">
+                <i class="fas fa-history"></i> History
+            </a>
+        </nav>
+
         <div class="auth-buttons">
             <button class="login">Login</button>
             <button class="signup">Sign Up</button>
@@ -20,13 +33,44 @@
     </header>
 
     <div class="search-bar">
-        <input type="text" placeholder="Search...">
-        <button>Search</button>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" placeholder="Search...">
+            <button>Search</button>
+        </div>
+        <div class="filter-container">
+            <button class="filter-button">
+                <i class="fas fa-filter"></i> Filter by
+            </button>
+            <div class="custom-dropdown">
+                <div class="dropdown-option" data-value="country">
+                    <i class="fas fa-globe"></i> Country
+                </div>
+                <div class="dropdown-option" data-value="person">
+                    <i class="fas fa-user"></i> Person
+                </div>
+                <div class="dropdown-option" data-value="enterprise">
+                    <i class="fas fa-building"></i> Enterprise
+                </div>
+            </div>
+        </div>
     </div>
 
     <main>
-        <h1>Dashboard</h1>
-        <p>This is a simple webpage with a logo, login, and search bar.</p>
+        <section class="scrollable-section">
+            <h2>Section 1</h2>
+            <p>Content for section 1...</p>
+        </section>
+        <section class="scrollable-section">
+            <h2>Section 2</h2>
+            <p>Content for section 2...</p>
+        </section>
+        <section class="scrollable-section">
+            <h2>Section 3</h2>
+            <p>Content for section 3...</p>
+        </section>
     </main>
+
+    <script src="js/script.js"></script>
 </body>
 </html>
