@@ -16,11 +16,15 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f8f8f8;
-    padding: 10px 20px;
+    background-color: ;
+    padding: 5px 10px;
     border-bottom: 1px solid #ddd;
 }
 
+.logo {
+    background-color: black;
+    border-radius: 10px;
+}
 .logo img {
     height: 50px;
     border-radius: 10px;
@@ -106,7 +110,7 @@ nav a.nav-item:hover {
 
 .search-container button {
     padding: 10px 20px;
-    background-color: #28a745;
+    background-color: rgb(232, 122, 39);
     color: white;
     border: none;
     border-radius: 5px;
@@ -124,7 +128,7 @@ nav a.nav-item:hover {
 }
 
 .filter-button {
-    background-color: #007BFF;
+    background-color: gray;
     color: white;
     border: none;
     border-radius: 5px;
