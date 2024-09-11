@@ -1,7 +1,7 @@
 """Contains the Flask part of the project
     Import required Module/Lib
 """
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, make_response, request
 
 app = Flask(__name__)
 
