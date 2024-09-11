@@ -194,3 +194,49 @@ main {
 .scrollable-section p {
     line-height: 1.6;
 }
+
+/* UI properties for Footer */
+.footer-container {
+    background: black url(../images/new-bg.png) repeat;
+    color: ;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #ccc;
+}
+
+.footer-logo img {
+    max-width: 300px;
+    height: auto;
+    margin-bottom: 5px;
+    border-radius: 30px;
+}
+
+.footer-info {
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.footer-links a {
+    margin: 10px 10px;
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 14px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+.footer-social a {
+    margin: 10px 0 0 10px;
+    color: white;
+    gap: 5px;
+    font-size: 20px;
+}
+
+.footer-social a:hover {
+    color: #007BFF;
+}

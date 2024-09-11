@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log in - easyOSINT</title>
+    <title>Sign UP - easyOSINT</title>
     <link href="img/logo_trial.png" rel="icon" type="image/x-icon" style="border-radius:50px;">
     <!-- Include Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/signup.css">
 </head>
 <body>
     <div class="signup-container">
@@ -15,29 +15,35 @@
             <img src="img/logo_trial.png" alt="Logo">
         </div>
         <div class="right-section">
-            <h2>Log in</h2>
-            <form class="login-form">
+            <h2>Sign Up</h2>
+            <form class="signup-form">
+                <div class="form-group">
+                    <input type="text" id="first-name" placeholder="first name">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="last-name" placeholder="last name">
+                </div>
                 <div class="form-group">
                     <input type="email" id="email" placeholder="email">
                 </div>
                 <div class="form-group">
                     <input type="password" id="password" placeholder="password">
                 </div>
-                <button type="submit" class="login-btn">Log in</button>
+                <button type="submit" class="signup-btn">Sign Up</button>
             </form>
-            <p class="create-account">Don't have an account? <a href="signup.html">Sign Up</a></p>
+            <p class="existed-account">Already have an account? <a href="login.html">Log in</a></p>
 
             <div class="auth-options">
                 <p>OR</p>
                 <br>
                 <button class="auth-btn google">
-                    <i class="fab fa-google"></i> Google
+                    <i class="fab fa-google"></i>Google
                 </button>
-                <button class="auth-btn facebook">
-                    <i class="fab fa-facebook"></i> Facebook
-                </button>
+<!--                <button class="auth-btn facebook">-->
+<!--                    <i class="fab fa-facebook-f"></i>Facebook-->
+<!--                </button>-->
                 <button class="auth-btn github">
-                    <i class="fab fa-github"></i> GitHub
+                    <i class="fab fa-github"></i>GitHub
                 </button>
             </div>
         </div>
