@@ -6,7 +6,7 @@ from flask import Flask, render_template, redirect, url_for, make_response, requ
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
+@app.route('/')
 def index():
     return render_template('index.html')
 
