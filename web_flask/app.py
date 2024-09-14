@@ -1,19 +1,26 @@
 """Contains the Flask part of the project
     Import required Module/Lib
 """
-from flask import Flask, render_template, redirect, url_for, make_response, request
-from flask_login import LoginManager, login_user, logout_user, UserMixin, login_required
-from flask_dance.contrib.google import make_google_blueprint, google
-from flask_dance.contrib.github import make_github_blueprint, github
+# Import python standard lib
+import json
+import os
+import sqlite3
 
-# from models.user import User
+# Third-party libraries
+from flask import Flask, render_template, redirect, url_for
+from flask import (
+    LoginManager,
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+)
+from oauthlib.oauth2 import WebApplicationClient
+import requests
+
 
 app = Flask(__name__)
 app.secret_key = "supersekrit"
-
-# Login Manager
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 
 @app.route("/")
