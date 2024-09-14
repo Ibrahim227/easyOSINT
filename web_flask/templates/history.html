@@ -11,9 +11,28 @@
     <link rel="stylesheet" href="../static/css/history.css">
 </head>
 <body>
+    <header>
+        <div class="container">
+            <label class="fas fa-history"></label>History
+            <div id="datetime-display"></div>
+            <script>
+                function updateDateTime() {
+                    const now = new Date();
+                    const dateTimeString = now.toLocaleString(); // Convert to readable format
+
+                    document.getElementById('datetime-display').innerHTML = dateTimeString;
+                }
+
+                // Call the function once to display the time immediately
+                updateDateTime();
+
+                // Optional: Update the time every second
+                setInterval(updateDateTime, 1000);
+            </script>
+        </div>
+    </header>
     <main>
         <section>
-            <p>Lee</p>
         </section>
     </main>
     <footer class="footer-container">
