@@ -145,7 +145,8 @@ def github_login():
 
 @app.route('/history', methods=["GET"])
 def history():
-    return render_template('history.html')
+    if request.method == "GET":
+        return render_template('history.html')
 
 
 @app.route("/success", methods=["GET"])
