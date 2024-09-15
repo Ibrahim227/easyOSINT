@@ -25,16 +25,26 @@
                 <i class="fas fa-history"></i> History
             </a>
         </nav>
-
+        <!-- Conditional rendering based on whether the user is logged in -->
          <div class="auth-section">
-            <!-- Profile Image -->
-            <div class="profile-image">
-                <img src="../static/img/profile.png" alt="Profile" id="profile-pic">
-            </div>
-            <div class="auth-buttons">
-                <button class="login-btn" id="login-btn">Login</button>
-                <button class="signup-btn" id="signup-btn">Sign Up</button>
-            </div>
+             <!-- Profile Image -->
+             <div class="profile-image">
+                 <img src="../static/img/profile.png" alt="Profile" id="profile-pic">
+             </div>
+
+             {% if session['logged_in'] %}
+                 <!-- Display the user's name if logged in -->
+                 <div class="user-info">
+                    <span>Welcome, {{ session['name'] }}</span>
+                 <a href="/logout" class="logout-btn">Logout</a>
+                </div>
+             {% else %}
+                <!-- Display the login and signup buttons if not logged in -->
+                <div class="auth-buttons">
+                    <button class="login-btn" id="login-btn">Login</button>
+                    <button class="signup-btn" id="signup-btn">Sign Up</button>
+                </div>
+             {% endif %}
         </div>
     </header>
 
@@ -111,31 +121,6 @@
         // Display login form and handle login on Login button click
         document.getElementById('login-btn').addEventListener('click', function() {
                 window.location.href = '/login';  // login flask route
-
-            // Check user credentials (this should be handled by the backend using AJAX or form submission)
-            if (email && password) {
-                // Simulate form submission to backend (replace this with actual AJAX call or form submission)
-                fetch('/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email: email, password: password })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Login successful!');
-                        window.location.href = 'index.html';  // Redirect to homepage
-                    } else {
-                        alert('Login failed: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during login:', error);
-                });
-            }
-        });
     </script>
 </body>
 </html>
