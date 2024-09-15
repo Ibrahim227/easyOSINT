@@ -68,8 +68,8 @@ def get_db():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email')
+        password = request.form.get('password')
         hashed_password = generate_password_hash(password, method='sha256')
         name = request.form['first-name'] + ' ' + request.form['last-name']
 
@@ -92,8 +92,8 @@ def signup():
 def login():
     if request.method == 'POST':
         # Retrieve data from the form (request.form)
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email')
+        password = request.form.get('password')
 
         # Add logic to validate the user's credentials here
         user = get_user_from_db(email)
