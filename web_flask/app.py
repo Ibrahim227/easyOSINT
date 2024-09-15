@@ -70,8 +70,16 @@ def signup():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        hashed_password = generate_password_hash(password, method='sha256')
-        name = request.form['first-name'] + ' ' + request.form['last-name']
+        first_name = request.form.get('first-name')
+        last_name = request.form.get('last-name')
+
+        # Ensure all required fields are present
+        if not email or not password or not first_name or not last_name:
+            return "Please fill out all fields", 400
+
+        # Hash the password only if it exists
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        name = f'{first_name} {last_name}'
 
         conn = get_db()
         cur = conn.cursor()
@@ -87,6 +95,11 @@ def signup():
     return render_template('signup.html')
 
 
+def get_user_from_db(email):
+    db = get_db()
+    return db.execute('SELECT * FROM user WHERE email = ?', (email,)).fetchone()
+
+
 # Route to display login page and handle login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -95,11 +108,19 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # Add logic to validate the user's credentials here
+        # Validate if email and password were submitted
+        if not email or not password:
+            flash('Please fill out both fields')
+            return render_template('login.html')
+
+        # Retrieve user from database
         user = get_user_from_db(email)
+
+        # Check if the user exists and the password is correct
         if user and check_password_hash(user['password'], password):
-            # Handle successful login
-            return redirect(url_for('/'))
+            # Handle successful login, store user session
+            session['user_id'] = user['id']  # Store user id in session
+            return redirect(url_for('index'))  # Use the function name, not path
         else:
             flash('Invalid login credentials')
 
