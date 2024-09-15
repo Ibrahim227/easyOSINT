@@ -88,7 +88,12 @@ def signup():
             cur.execute('INSERT INTO user (id, name, email, password, profile_pic) VALUES (?, ?, ?, ?, ?)',
                         (str(uuid4()), name, email, hashed_password, 'default_profile_pic.png'))
             conn.commit()
-            return redirect(url_for('login'))
+            # Log in the user immediately after successful signup
+            session['logged_in'] = True
+            session['name'] = name
+
+            return redirect(url_for('index')) # redirect to homepage
+
         except sqlite3.IntegrityError:
             return "User already exists"
 
@@ -118,21 +123,25 @@ def login():
 
         # Check if the user exists and the password is correct
         if user and check_password_hash(user['password'], password):
+            # Store user info in session after successful login
+            session['logged_in'] = True
+            session['name'] = user['name']
             # Handle successful login, store user session
-            session['user_id'] = user['id']  # Store user id in session
+            # session['user_id'] = user['id'] # Store user id in session
             return redirect(url_for('index'))  # Use the function name, not path
         else:
             flash('Invalid login credentials')
 
     # If GET request or failed login, render the login page again
-    return render_template('login.html')
+    # return render_template('login.html')
 
 
 # Logout Route
 @app.route('/logout')
 def logout():
-    session.clear()
-    return redirect(url_for('login'))
+    session.pop('logged_in', None)
+    session.pop('name', None)
+    return redirect(url_for('index'))
 
 
 # @app.route("/google_login")
