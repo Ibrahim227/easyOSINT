@@ -48,7 +48,21 @@ nav a.nav-item {
 nav a.nav-item:hover {
     color: #007BFF;
 }
+.auth-section {
+    display: flex;
+    align-items: center;
+}
 
+.profile-image {
+    margin-right: 10px;
+}
+
+.profile-image img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 .auth-buttons {
     display: flex;
     gap: 10px;
@@ -62,11 +76,13 @@ nav a.nav-item:hover {
     color: white;
 }
 
-.login {
+
+.login-btn {
     background-color: #007BFF;
+    border-radius: 50px;
 }
 
-.signup {
+.signup-btn {
     background-color: #28a745;
 }
 
@@ -198,7 +214,6 @@ main {
 /* UI properties for Footer */
 .footer-container {
     background: black url(../img/new-bg.png) repeat;
-    color: ;
     padding: 20px;
     text-align: center;
     display: flex;
