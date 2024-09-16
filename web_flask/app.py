@@ -127,7 +127,7 @@ def login():
             session['logged_in'] = True
             session['name'] = user['name']
             # Handle successful login, store user session
-            # session['user_id'] = user['id'] # Store user id in session
+            session['user_id'] = user['id'] # Store user id in session
             return redirect(url_for('index'))  # Redirect to the homepage
         else:
             flash('Invalid email or password!')
@@ -173,7 +173,7 @@ def github_login():
     return "You are @{login} on GitHub".format(login=resp.json()["login"])
 
 
-@app.route('/history', methods=["GET"])
+@app.route('/history', methods=["GET", "POST"])
 def history():
     if request.method == "GET":
         return render_template('history.html')
