@@ -21,12 +21,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from db import init_db_command, get_db
 from user import User
 
-GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", None)
-GOOGLE_DISCOVERY_URL = (
-    "https://accounts.google.com/.well-known/openid-configuration"
-)
-
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
@@ -41,9 +35,6 @@ try:
 except sqlite3.OperationalError:
     # Assume it's already been created
     pass
-
-# OAuth 2 client setup
-client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 
 # Flask-Login helper to retrieve a user from our db
@@ -92,7 +83,7 @@ def signup():
             session['logged_in'] = True
             session['name'] = name
 
-            return redirect(url_for('index')) # redirect to homepage
+            return redirect(url_for('index'))  # redirect to homepage
 
         except sqlite3.IntegrityError:
             return "User already exists"
@@ -127,7 +118,7 @@ def login():
             session['logged_in'] = True
             session['name'] = user['name']
             # Handle successful login, store user session
-            session['user_id'] = user['id'] # Store user id in session
+            session['user_id'] = user['id']  # Store user id in session
             return redirect(url_for('index'))  # Redirect to the homepage
         else:
             flash('Invalid email or password!')
