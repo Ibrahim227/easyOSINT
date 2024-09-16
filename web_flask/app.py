@@ -128,12 +128,12 @@ def login():
             session['name'] = user['name']
             # Handle successful login, store user session
             # session['user_id'] = user['id'] # Store user id in session
-            return redirect(url_for('index'))  # Use the function name, not path
+            return redirect(url_for('index'))  # Redirect to the homepage
         else:
-            flash('Invalid login credentials')
+            flash('Invalid email or password!')
 
     # If GET request or failed login, render the login page again
-    # return render_template('login.html')
+    return render_template('login.html')
 
 
 # Logout Route
