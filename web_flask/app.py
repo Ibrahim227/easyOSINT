@@ -16,6 +16,7 @@ from flask_login import LoginManager, current_user, login_required, login_user, 
 from oauthlib.oauth2 import WebApplicationClient
 import requests
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
 
 # Internal imports
 from db import init_db_command, get_db
@@ -46,6 +47,12 @@ def load_user(user_id):
 @app.route("/")
 def index():
     return render_template('index.html')
+
+
+@app.route('/history', methods=["GET", "POST"])
+def history():
+    if request.method == "GET":
+        return render_template('history.html')
 
 
 # Database functions
@@ -135,44 +142,14 @@ def logout():
     return redirect(url_for('index'))
 
 
-# @app.route("/google_login")
-# def google_login():
-#     if not google.authorized:
-#         return redirect(url_for("google.login"))
-#     resp = google.get("/plus/v1/people/me")
-#     assert resp.ok, resp.text
-#     user_info = resp.json()
-#     user = User(user_info["id"])
-#     login_user(user)
-#     return redirect(url_for("index"))
+load_dotenv()
 
-
-# GitHub OAuth blueprint
-blueprint = make_github_blueprint(
-    client_id="my-key-here",  # Replace with your GitHub client ID
-    client_secret="my-secret-here",  # Replace with your GitHub client secret
+# GitHub OAuth blueprint setup
+github_blueprint = make_github_blueprint(
+    client_id=os.getenv("CLIENT_ID"),  # Use environment variables for security
+    client_secret=os.getenv("CLIENT_SECRET"),
 )
-app.register_blueprint(blueprint, url_prefix="/login")
-
-
-@app.route("/github_login")
-def github_login():
-    if not github.authorized:
-        return redirect(url_for("github.login"))
-    resp = github.get("/user")
-    assert resp.ok, resp.text
-    return "You are @{login} on GitHub".format(login=resp.json()["login"])
-
-
-@app.route('/history', methods=["GET", "POST"])
-def history():
-    if request.method == "GET":
-        return render_template('history.html')
-
-
-@app.route("/success", methods=["GET"])
-def success():
-    return render_template("success.html")
+app.register_blueprint(github_blueprint, url_prefix="/github_login")
 
 
 if __name__ == "__main__":
