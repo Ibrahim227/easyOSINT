@@ -25,6 +25,7 @@
                 <i class="fas fa-history"></i> History
             </a>
         </nav>
+
         <!-- Conditional rendering based on whether the user is logged in -->
          <div class="auth-section">
              <!-- Profile Image -->
@@ -75,44 +76,40 @@
 
      <!-- Person Form, initially hidden -->
     <div class="person-form" id="person-form" style="display: none;">
-        <form>
+        <div class="left-section">
+                <label for="photo">Upload Photo:</label>
+                <input type="file" id="photo" name="photo">
+        </div>
+        <form class="hidden-form">
+            <h4>Search by</h4>
             <div class="form-group">
                 <label for="first-name">First Name:</label>
-                <input type="text" id="first-name" name="first-name" placeholder="First Name">
+                <input type="text" id="first-name" name="first-name" placeholder="first name">
             </div>
             <div class="form-group">
                 <label for="last-name">Last Name:</label>
-                <input type="text" id="last-name" name="last-name" placeholder="Last Name">
+                <input type="text" id="last-name" name="last-name" placeholder="last name">
             </div>
             <div class="form-group">
                 <label for="age">Age:</label>
-                <input type="number" id="age" name="age" placeholder="Age">
+                <input type="number" id="age" name="age" placeholder="age">
             </div>
             <div class="form-group">
                 <label for="gender">Gender:</label>
                 <input type="text" id="gender" name="gender" placeholder="gender">
             </div>
             <div class="form-group">
-                <label for="skin-color">Skin Color:</label>
-                <input type="text" id="skin-color" name="skin-color" placeholder="Skin Color">
-            </div>
-            <div class="form-group">
-                <label for="ethnicity">Ethnicity:</label>
-                <input type="text" id="ethnicity" name="ethnicity" placeholder="Ethnicity">
-            </div>
-            <div class="form-group">
                 <label for="height">Height (cm):</label>
-                <input type="number" id="height" name="height" placeholder="Height">
+                <input type="number" id="height" name="height" placeholder="height">
             </div>
             <div class="form-group">
                 <label for="weight">Weight (kg):</label>
-                <input type="number" id="weight" name="weight" placeholder="Weight">
+                <input type="number" id="weight" name="weight" placeholder="weight">
             </div>
-            <div class="form-group">
-                <label for="photo">Upload Photo:</label>
-                <input type="file" id="photo" name="photo">
+            <div class="bottom-section">
+                <button type="button" class="cancel-btn" id="cancel-btn">Cancel</button>
+                <button onclick="displayMessage()" id="search-hidden">Search</button>
             </div>
-            <button type="button" class="cancel-btn" id="cancel-btn">Cancel</button>
         </form>
     </div>
 
@@ -154,21 +151,7 @@
             </div> -->
         </div>
     </footer>
-<!--    <script>-->
-<!--        document.querySelector('.filter-button').addEventListener('click', function() {-->
-<!--            this.parentElement.classList.toggle('show-dropdown');-->
-<!--        });-->
 
-<!--        const dropdownOptions = document.querySelectorAll('.dropdown-option');-->
-<!--        dropdownOptions.forEach(option => {-->
-<!--            option.addEventListener('click', function() {-->
-<!--                console.log('Filter by:', this.getAttribute('data-value'));-->
-<!--                document.querySelector('.filter-button').innerHTML = '<i class="fas fa-filter"></i> Filter by ' + ':' + ' ' + this.innerText;-->
-<!--                document.querySelector('.filter-container').classList.remove('show-dropdown');-->
-<!--            });-->
-<!--        });-->
-
-<!--    </script>-->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Attach event listener to Login button
@@ -189,45 +172,56 @@
         });
     </script>
     <script>
-        document.querySelector('.filter-button').addEventListener('click', function() {
-            this.parentElement.classList.toggle('show-dropdown');
-        });
-
-        const dropdownOptions = document.querySelectorAll('.dropdown-option');
-        dropdownOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                console.log('Filter by:', this.getAttribute('data-value'));
-                document.querySelector('.filter-button').innerHTML = '<i class="fas fa-filter"></i> Filter by ' + ':' + ' ' + this.innerText;
-                document.querySelector('.filter-container').classList.remove('show-dropdown');
-            });
-        });
         document.addEventListener('DOMContentLoaded', function() {
+            // Toggle the dropdown on filter button click
+            document.querySelector('.filter-button').addEventListener('click', function() {
+                this.parentElement.classList.toggle('show-dropdown');
+            });
+
+            // Handle dropdown option clicks
+            const dropdownOptions = document.querySelectorAll('.dropdown-option');
+            dropdownOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    console.log('Filter by:', this.getAttribute('data-value'));
+                    document.querySelector('.filter-button').innerHTML = '<i class="fas fa-filter"></i> Filter by ' + ':' + ' ' + this.innerText;
+                    document.querySelector('.filter-container').classList.remove('show-dropdown');
+                });
+            });
+
             // Get the elements
             const personForm = document.getElementById('person-form');
-            const searchBar = document.getElementById('search-bar');
+            const searchBar = document.querySelector('.search-bar');
             const cancelBtn = document.getElementById('cancel-btn');
+            const filterButton = document.querySelector('.filter-button');
 
-            // handle "Cancel" btn click
-            cancelBtn.addEventListener('click', function() {
-                // Hide the person form and show the search bar
-                personForm.style.display = 'none';
-                searchBar.style.display = 'block';
-            });
+            // Only add event listener if the cancel button exists
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function() {
+                    // Hide the person form and show the search bar
+                    personForm.style.display = 'none'; // Reset to default style
+                    searchBar.style.display = ''; // Reset to default style
+
+                    // Reset the filter button text to default "Filter by"
+                    filterButton.innerHTML = '<i class="fas fa-filter"></i> Filter by';
+                    document.querySelector('.filter-container').classList.remove('show-dropdown');
+                });
+            }
 
             // Handle the filter option for "Person" (hides the search bar and shows the form)
             const personFilter = document.querySelector('[data-value="person"]');
+            if (personFilter) {
                 personFilter.addEventListener('click', function() {
                     searchBar.style.display = 'none';
-                    personForm.style.display = 'block';
-            });
+                    personForm.style.display = '';
+                });
+            }
 
-            // If no filter is selected, default to showing the search bar
-            const otherOptions = document.querySelectorAll('.dropdown-option');
-            otherOptions.forEach(option => {
+            // Handle other filter options, showing search bar and hiding the person form
+            dropdownOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     if (this.getAttribute('data-value') !== 'person') {
-                        searchBar.style.display = 'flex';
-                        personForm.style.display = 'none';
+                        searchBar.style.display = ''; // Changed to flex for layout consistency
+                        personForm.style.display = '';
                     }
                 });
             });
