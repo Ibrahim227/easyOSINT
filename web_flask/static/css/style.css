@@ -230,7 +230,7 @@ main {
 }
 .left-section {
     background-color: ;
-    display: flex;
+    display: relative;
     align-items: center;
     justify-content: center;
     padding: 10px;
@@ -240,9 +240,16 @@ main {
     padding: 40px;
     width: 60%;
 }
+
+}
 .hidden-form {
     display: flex;
     flex-direction: column;
+}
+.hidden-form h4 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #333;
 }
 .form-group label {
     display: block;
