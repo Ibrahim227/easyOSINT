@@ -48,7 +48,7 @@
         </div>
     </header>
 
-    <div class="search-bar">
+    <div class="search-bar" id="search-bar">
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
             <script>function displayMessage() { alert(1);};</script>
@@ -63,7 +63,7 @@
 <!--                <div class="dropdown-option" data-value="country">-->
 <!--                    <i class="fas fa-globe"></i> Country-->
 <!--                </div>-->
-                <div class="dropdown-option" data-value="person">
+                <div class="dropdown-option" data-value="person" id="filter-person">
                     <i class="fas fa-user"></i> Person
                 </div>
 <!--                <div class="dropdown-option" data-value="enterprise">-->
@@ -71,6 +71,49 @@
 <!--                </div>-->
             </div>
         </div>
+    </div>
+
+     <!-- Person Form, initially hidden -->
+    <div class="person-form" id="person-form" style="display: none;">
+        <form>
+            <div class="form-group">
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" name="first-name" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" name="last-name" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" placeholder="Age">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender" name="gender" placeholder="gender">
+            </div>
+            <div class="form-group">
+                <label for="skin-color">Skin Color:</label>
+                <input type="text" id="skin-color" name="skin-color" placeholder="Skin Color">
+            </div>
+            <div class="form-group">
+                <label for="ethnicity">Ethnicity:</label>
+                <input type="text" id="ethnicity" name="ethnicity" placeholder="Ethnicity">
+            </div>
+            <div class="form-group">
+                <label for="height">Height (cm):</label>
+                <input type="number" id="height" name="height" placeholder="Height">
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" name="weight" placeholder="Weight">
+            </div>
+            <div class="form-group">
+                <label for="photo">Upload Photo:</label>
+                <input type="file" id="photo" name="photo">
+            </div>
+            <button type="button" class="cancel-btn" id="cancel-btn">Cancel</button>
+        </form>
     </div>
 
     <main>
@@ -111,26 +154,84 @@
             </div> -->
         </div>
     </footer>
-    <script src="../static/js/script.js"></script>
+<!--    <script>-->
+<!--        document.querySelector('.filter-button').addEventListener('click', function() {-->
+<!--            this.parentElement.classList.toggle('show-dropdown');-->
+<!--        });-->
+
+<!--        const dropdownOptions = document.querySelectorAll('.dropdown-option');-->
+<!--        dropdownOptions.forEach(option => {-->
+<!--            option.addEventListener('click', function() {-->
+<!--                console.log('Filter by:', this.getAttribute('data-value'));-->
+<!--                document.querySelector('.filter-button').innerHTML = '<i class="fas fa-filter"></i> Filter by ' + ':' + ' ' + this.innerText;-->
+<!--                document.querySelector('.filter-container').classList.remove('show-dropdown');-->
+<!--            });-->
+<!--        });-->
+
+<!--    </script>-->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Attach event listener to Login button
-        const loginBtn = document.getElementById('login-btn');
-        if (loginBtn) {
-            loginBtn.addEventListener('click', function() {
-                window.location.href = '/login';
-            });
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attach event listener to Login button
+            const loginBtn = document.getElementById('login-btn');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function() {
+                    window.location.href = '/login';
+                });
+            }
 
-        // Attach event listener to Signup button
-        const signupBtn = document.getElementById('signup-btn');
-        if (signupBtn) {
-            signupBtn.addEventListener('click', function() {
-                window.location.href = '/signup';
-            });
-        }
-    });
-</script>
+            // Attach event listener to Signup button
+            const signupBtn = document.getElementById('signup-btn');
+            if (signupBtn) {
+                signupBtn.addEventListener('click', function() {
+                    window.location.href = '/signup';
+                });
+            }
+        });
+    </script>
+    <script>
+        document.querySelector('.filter-button').addEventListener('click', function() {
+            this.parentElement.classList.toggle('show-dropdown');
+        });
 
+        const dropdownOptions = document.querySelectorAll('.dropdown-option');
+        dropdownOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                console.log('Filter by:', this.getAttribute('data-value'));
+                document.querySelector('.filter-button').innerHTML = '<i class="fas fa-filter"></i> Filter by ' + ':' + ' ' + this.innerText;
+                document.querySelector('.filter-container').classList.remove('show-dropdown');
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the elements
+            const personForm = document.getElementById('person-form');
+            const searchBar = document.getElementById('.search-bar');
+            const cancelBtn = document.getElementById('cancel-btn');
+
+            // handle "Cancel" btn click
+            cancelBtn.addEventListener('click', function() {
+                // Hide the person form and show the search bar
+                personForm.style.display = 'none';
+                searchBar.style.display = 'block';
+            });
+
+            // Handle the filter option for "Person" (hides the search bar and shows the form)
+            const personFilter = document.querySelector('[data-value="person"]');
+                personFilter.addEventListener('click', function() {
+                    searchBar.style.display = 'none';
+                    personForm.style.display = 'block';
+            });
+
+            // If no filter is selected, default to showing the search bar
+            const otherOptions = document.querySelectorAll('.dropdown-option');
+            otherOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    if (this.getAttribute('data-value') !== 'person') {
+                        searchBar.style.display = 'flex';
+                        personForm.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
