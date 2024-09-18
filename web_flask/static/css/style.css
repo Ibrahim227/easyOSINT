@@ -125,7 +125,7 @@ nav a.nav-item:hover {
 }
 
 .search-container button {
-    padding: 10px 20px;
+    padding: 10px 50px;
     background-color: rgb(232, 122, 39);
     color: white;
     border: none;
@@ -134,7 +134,7 @@ nav a.nav-item:hover {
 }
 
 .search-container button:hover {
-    background-color: #218838;
+    background-color: rgb(224, 155, 105);
 }
 
 .filter-container {
@@ -159,7 +159,7 @@ nav a.nav-item:hover {
 }
 
 .filter-button:hover {
-    background-color: #0056b3;
+    background-color: rgb(160, 167, 171);
 }
 
 .custom-dropdown {
@@ -168,7 +168,7 @@ nav a.nav-item:hover {
     top: 50px;
     background-color: white;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 150px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -196,6 +196,7 @@ main {
 }
 
 .scrollable-section {
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.1);
     max-height: 200px;
     overflow-y: auto;
     border: 1px solid #ddd;
@@ -210,6 +211,75 @@ main {
 .scrollable-section p {
     line-height: 1.6;
 }
+
+/* Hidden form UI */
+.person-form {
+    display: flex;
+    width: 650px;
+    height: 60vh;
+    justify-content: center;
+    align-items: center;
+    background-color: ;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0 0 400px;
+}
+.form-group {
+    margin-bottom: 5px;
+}
+.left-section {
+    background-color: ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    width: 50%;
+}
+.right-section {
+    padding: 40px;
+    width: 60%;
+}
+.hidden-form {
+    display: flex;
+    flex-direction: column;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0px;
+    font-size: 14px;
+    color: #333;
+}
+.form-group input {
+    width: 250px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.cancel-btn {
+    padding: 10px 40px;
+    background-color: rgb(255, 0, 0);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.cancel-btn:hover {
+    background-color: rgb(255, 51, 105);
+}
+#search-hidden {
+    padding: 10px 40px;
+    background-color: rgb(232, 122, 39);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#search-hidden:hover {
+    background-color: rgb(224, 155, 105);
+}
+/* Hidden form UI properties */
 
 /* UI properties for Footer */
 .footer-container {
