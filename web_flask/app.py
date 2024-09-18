@@ -1,31 +1,66 @@
 """Contains the Flask part of the project
     Import required Module/Lib
 """
-# Import python standard lib
-import json
 import os
+# Import python standard lib
 import sqlite3
 from uuid import uuid4
 
-# Third-party libraries
-from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
-from flask_dance.contrib.github import make_github_blueprint, github
-from flask_dance.contrib.google import make_google_blueprint, google
-from flask_login import LoginManager, current_user, login_required, login_user, logout_user
-
-from oauthlib.oauth2 import WebApplicationClient
-import requests
-from werkzeug.security import generate_password_hash, check_password_hash
+from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
+# Third-party libraries
+from flask import Flask, render_template, redirect, url_for, request, flash, session
+from flask_login import LoginManager
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Internal imports
 from db import init_db_command, get_db
 from user import User
 
+# load env variables
+load_dotenv()
+
 # Flask app setup
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 
+oauth = OAuth(app)
+
+app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
+app.config['GOOGLE_CLIENT_ID'] = os.getenv("GOOGLE_CLIENT_ID")
+app.config['GOOGLE_CLIENT_SECRET'] = os.getenv("GOOGLE_CLIENT_SECRET")
+app.config['GITHUB_CLIENT_ID'] = os.getenv("GITHUB_CLIENT_ID")
+app.config['GITHUB_CLIENT_SECRET'] = os.getenv("GITHUB_CLIENT_SECRET")
+
+google = oauth.register(
+    name='google',
+    client_id=app.config["GOOGLE_CLIENT_ID"],
+    client_secret=app.config["GOOGLE_CLIENT_SECRET"],
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    access_token_params=None,
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    authorize_params=None,
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+    # This is only needed if using openId to fetch user info
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'},
+    claims_options={
+        'iss': {'values': ['https://accounts.google.com']}
+    }
+)
+
+github = oauth.register(
+    name='github',
+    client_id=app.config["GITHUB_CLIENT_ID"],
+    client_secret=app.config["GITHUB_CLIENT_SECRET"],
+    access_token_url='https://github.com/login/oauth/access_token',
+    access_token_params=None,
+    authorize_url='https://github.com/login/oauth/authorize',
+    authorize_params=None,
+    api_base_url='https://api.github.com/',
+    client_kwargs={'scope': 'user:email'},
+    verify=False,
+)
 # User session management setup
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -47,6 +82,44 @@ def load_user(user_id):
 @app.route("/")
 def index():
     return render_template('index.html')
+
+
+# Google login route
+
+@app.route('/login/google')
+def google_login():
+    redirect_uri = url_for('google_authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@app.route('/login/google/authorize')
+def google_authorize():
+    try:
+        token = google.authorize_access_token()
+        resp = google.get('userinfo').json()
+        print(f"\n{resp}\n")
+        return "You are successfully signed in using google"
+    except Exception as e:
+        print(f"Error: {e}")
+        return "Authorization failed. Please try again."
+
+
+@app.route('/login/github')
+def github_login():
+    redirect_uri = url_for('github_authorize', _external=True)
+    return github.authorize_redirect(redirect_uri)
+
+
+@app.route('/login/github/authorize')
+def github_authorize():
+    try:
+        token = github.authorize_access_token()
+        resp = github.get('user').json()
+        print(f"\n{resp}\n")
+        return "You are successfully signed in using github"
+    except Exception as e:
+        print(f"Error: {e}")
+        return "Authorization failed. Please try again."
 
 
 @app.route('/history', methods=["GET", "POST"])
@@ -140,16 +213,6 @@ def logout():
     session.pop('logged_in', None)
     session.pop('name', None)
     return redirect(url_for('index'))
-
-
-load_dotenv()
-
-# GitHub OAuth blueprint setup
-github_blueprint = make_github_blueprint(
-    client_id=os.getenv("CLIENT_ID"),  # Use environment variables for security
-    client_secret=os.getenv("CLIENT_SECRET"),
-)
-app.register_blueprint(github_blueprint, url_prefix="/github_login")
 
 
 if __name__ == "__main__":
