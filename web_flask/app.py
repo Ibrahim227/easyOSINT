@@ -16,6 +16,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # Internal imports
 from db import init_db_command, get_db
 from user import User
+from search import SearchModel
 
 # load env variables
 load_dotenv()
@@ -209,6 +210,21 @@ def login():
 
     # If GET request or failed login, render the login page again
     return render_template('login.html')
+
+
+# search route
+@app.route('/search', methods=['POST'])
+def search():
+    query = request.form.get('query')  # Get the search query from the form
+    if not query:
+        return {"error": "No search query provided"}, 400
+
+    # Instantiate the search model and perform the search
+    search_model = SearchModel(query)
+    results = search_model.perform_search()
+
+    # Return the search results as JSON
+    return results
 
 
 # Logout Route
