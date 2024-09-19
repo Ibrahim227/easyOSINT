@@ -9,7 +9,7 @@ from uuid import uuid4
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 # Third-party libraries
-from flask import Flask, render_template, redirect, url_for, request, flash, session
+from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
 from flask_login import LoginManager
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -217,14 +217,17 @@ def login():
 def search():
     query = request.form.get('query')  # Get the search query from the form
     if not query:
-        return {"error": "No search query provided"}, 400
+        return jsonify({"error": "No search query provided"}), 400
 
     # Instantiate the search model and perform the search
     search_model = SearchModel(query)
     results = search_model.perform_search()
 
+    if 'error' in results:
+        return jsonify(results), 500
+
     # Return the search results as JSON
-    return results
+    return jsonify(results), 200
 
 
 # Logout Route
