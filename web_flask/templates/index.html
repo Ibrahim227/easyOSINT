@@ -9,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../static/img/logo_trial.png" rel="icon" type="image/x-icon">
     <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <header>
@@ -53,8 +54,8 @@
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
             <form id="search-form" method="POST" action="/search">
-                <input type="text" name="query" placeholder="Search..." required>
-                <button type="submit">Search</button>
+                <input type="text" name="query"  id="search_query" placeholder="Search..." required>
+                <button type="submit" class="">Search</button>
             </form>
         </div>
         <div class="filter-container">
@@ -73,6 +74,22 @@
 <!--                </div>-->
             </div>
         </div>
+    </div>
+
+    <!-- Country Form, initially hidden -->
+    <div class="country-form" id="country-form" style="display: none;">
+        <form id="country-search-form" method="POST" action="/search">
+            <label for="country">Select Country:</label>
+            <select name="country" id="country">
+                <option value="USA">United States</option>
+                <option value="UK">United Kingdom</option>
+                <option value="CAN">Canada</option>
+                <option value="AUS">Australia</option>
+                <!-- Add more country options here -->
+            </select>
+            <button type="submit" id="search-country">Search</button>
+            <button type="button" id="country-cancel-btn">Cancel</button>
+        </form>
     </div>
 
      <!-- Person Form, initially hidden -->
@@ -114,8 +131,17 @@
 
     <main>
         <section class="scrollable-section">
-            <h2>Dashboard</h2>
-            <p>Content for section 1...</p>
+            <h2>Search Results</h2>
+            {% if results %}
+                {% for result in results %}
+                <div class="result-item">
+                    <h3>{{ result.title }}</h3>
+                    <a href="{{ result.link }}" target="_blank">{{ result.link }}</a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No results yet. Enter a query and click search.</p>
+            {% endif %}
         </section>
         <section class="scrollable-section">
             <h2>Section 2</h2>
@@ -192,35 +218,58 @@
             const searchBar = document.querySelector('.search-bar');
             const cancelBtn = document.getElementById('cancel-btn');
             const filterButton = document.querySelector('.filter-button');
+            const countryForm = document.getElementById('country-form');
+            const countryCancelBtn = document.getElementById('country-cancel-btn');  // Country cancel button
 
-            // Only add event listener if the cancel button exists
+            // Only add event listener if the cancel button exists (for Person filter)
             if (cancelBtn) {
                 cancelBtn.addEventListener('click', function() {
                     // Hide the person form and show the search bar
-                    personForm.style.display = 'none'; // Reset to default style
-                    searchBar.style.display = ''; // Reset to default style
-
-                    // Reset the filter button text to default "Filter by"
-                    filterButton.innerHTML = '<i class="fas fa-filter"></i> Filter by';
+                    personForm.style.display = 'none';  // Hide the person form
+                    searchBar.style.display = '';       // Show the search bar
+                    filterButton.innerHTML = '<i class="fas fa-filter"></i> Filter by'; // Reset filter button text
                     document.querySelector('.filter-container').classList.remove('show-dropdown');
                 });
             }
 
-            // Handle the filter option for "Person" (hides the search bar and shows the form)
-            const personFilter = document.querySelector('[data-value="person"]');
-            if (personFilter) {
-                personFilter.addEventListener('click', function() {
-                    searchBar.style.display = 'none';
-                    personForm.style.display = '';
+            // Only add event listener if the country cancel button exists (for Country filter)
+            if (countryCancelBtn) {
+                countryCancelBtn.addEventListener('click', function() {
+                    // Hide the country form and show the search bar
+                    countryForm.style.display = 'none'; // Hide the country form
+                    searchBar.style.display = '';       // Show the search bar
+                    filterButton.innerHTML = '<i class="fas fa-filter"></i> Filter by'; // Reset filter button text
+                    document.querySelector('.filter-container').classList.remove('show-dropdown');
                 });
             }
 
-            // Handle other filter options, showing search bar and hiding the person form
+            // Handle the filter option for "Person" (hides the search bar and shows the person form)
+            const personFilter = document.querySelector('[data-value="person"]');
+            if (personFilter) {
+                personFilter.addEventListener('click', function() {
+                    searchBar.style.display = 'none';  // Hide the search bar
+                    personForm.style.display = 'flex';  // Show the person form
+                    countryForm.style.display = 'none';  // Hide the country form, in case it was visible
+                });
+            }
+
+            // Handle the filter option for "Country" (hides the search bar and shows the country form)
+            const countryFilter = document.querySelector('[data-value="country"]');
+            if (countryFilter) {
+                countryFilter.addEventListener('click', function() {
+                    searchBar.style.display = 'none';   // Hide the search bar
+                    countryForm.style.display = 'block'; // Show the country form
+                    personForm.style.display = 'none';  // Hide the person form, in case it was visible
+                });
+            }
+
+            // Handle other filter options, showing search bar and hiding the person and country forms
             dropdownOptions.forEach(option => {
                 option.addEventListener('click', function() {
-                    if (this.getAttribute('data-value') !== 'person') {
-                        searchBar.style.display = ''; // Changed to flex for layout consistency
-                        personForm.style.display = '';
+                    if (this.getAttribute('data-value') !== 'person' && this.getAttribute('data-value') !== 'country') {
+                        searchBar.style.display = 'flex';    // Show the search bar for other filters
+                        personForm.style.display = '';   // Hide the person form
+                        countryForm.style.display = 'none';  // Hide the country form
                     }
                 });
             });
@@ -244,27 +293,6 @@
                 preview.style.display = 'none';  // Hide the preview if no image is selected
             }
         });
-    </script>
-    <script>
-        <script>
-            document.getElementById('search-form').addEventListener('submit', function(event) {
-                event.preventDefault();  // Prevent the form from reloading the page
-
-                // Send the search query using AJAX
-                const formData = new FormData(this);
-                const query = formData.get('query');
-
-                fetch('/search', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);  // Display the search results
-                    // TODO: Update the UI with the search results
-                })
-                .catch(error => console.error('Error:', error));
-            });
     </script>
     <script>
         document.getElementById('search-form').addEventListener('submit', function(event) {
