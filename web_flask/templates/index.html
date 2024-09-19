@@ -52,9 +52,10 @@
     <div class="search-bar" id="search-bar">
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
-            <script>function displayMessage() { alert(1);};</script>
-            <input type="text" placeholder="Search...">
-            <button onclick="displayMessage()">Search</button>
+            <form id="search-form" method="POST" action="/search">
+                <input type="text" name="query" placeholder="Search..." required>
+                <button type="submit">Search</button>
+            </form>
         </div>
         <div class="filter-container">
             <button class="filter-button">
@@ -242,6 +243,47 @@
                 preview.src = '';
                 preview.style.display = 'none';  // Hide the preview if no image is selected
             }
+        });
+    </script>
+    <script>
+        <script>
+            document.getElementById('search-form').addEventListener('submit', function(event) {
+                event.preventDefault();  // Prevent the form from reloading the page
+
+                // Send the search query using AJAX
+                const formData = new FormData(this);
+                const query = formData.get('query');
+
+                fetch('/search', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);  // Display the search results
+                    // TODO: Update the UI with the search results
+                })
+                .catch(error => console.error('Error:', error));
+            });
+    </script>
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the form from reloading the page
+
+            // Send the search query using AJAX
+            const formData = new FormData(this);
+            const query = formData.get('query');
+
+            fetch('/search', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);  // Display the search results
+                // TODO: Update the UI with the search results
+            })
+            .catch(error => console.error('Error:', error));
         });
     </script>
 </body>
