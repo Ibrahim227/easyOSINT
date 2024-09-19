@@ -46,7 +46,7 @@ google = oauth.register(
     client_kwargs={'scope': 'openid email profile'},
     claims_options={
         'iss': {'values': ['https://accounts.google.com']}
-    }
+    },
 )
 
 github = oauth.register(
@@ -96,7 +96,11 @@ def google_login():
 def google_authorize():
     try:
         token = google.authorize_access_token()
+        id_token = token.get('id_token')
         resp = google.get('userinfo').json()
+        if token['id_token']['iss'] != 'https://accounts.google.com':
+            raise Exception('Invalid Issuer')
+
         print(f"\n{resp}\n")
         return "You are successfully signed in using google"
     except Exception as e:
