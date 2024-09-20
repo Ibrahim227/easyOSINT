@@ -78,18 +78,14 @@
 
     <!-- Country Form, initially hidden -->
     <div class="country-form" id="country-form" style="display: none;">
-        <form id="country-search-form" method="POST" action="/search">
-            <label for="country">Select Country:</label>
-            <select name="country" id="country">
-                <option value="USA">United States</option>
-                <option value="UK">United Kingdom</option>
-                <option value="CAN">Canada</option>
-                <option value="AUS">Australia</option>
-                <!-- Add more country options here -->
-            </select>
-            <button type="submit" id="search-country">Search</button>
-            <button type="button" id="country-cancel-btn">Cancel</button>
-        </form>
+        <div class="country-container">
+            <i class="fas fa-search search-icon"></i>
+            <form id="country-search-form" method="POST" action="/search">
+                <input type="text" name="query" placeholder="Search..." required>
+                <button type="submit" id="search-country">Search</button>
+                <button type="button" id="country-cancel-btn">Cancel</button>
+            </form>
+        </div>
     </div>
 
      <!-- Person Form, initially hidden -->
@@ -116,15 +112,15 @@
             <div class="form-group">
                 <input type="email" id="email" name="email" placeholder="email">
             </div>
-            <div class="form-group">
-                <input type="number" id="height" name="height" placeholder="height (cm):">
-            </div>
-            <div class="form-group">
-                <input type="number" id="weight" name="weight" placeholder="weight (kg)">
-            </div>
+<!--            <div class="form-group">-->
+<!--                <input type="number" id="height" name="height" placeholder="height (cm):">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <input type="number" id="weight" name="weight" placeholder="weight (kg)">-->
+<!--            </div>-->
             <div class="bottom-section">
+                <button id="search-hidden">Search</button>
                 <button type="button" class="cancel-btn" id="cancel-btn">Cancel</button>
-                <button onclick="displayMessage()" id="search-hidden">Search</button>
             </div>
         </form>
     </div>
@@ -309,7 +305,44 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data);  // Display the search results
-                // TODO: Update the UI with the search results
+
+                // Find the results section in the main content
+                const resultsSection = document.querySelector('main .scrollable-section');
+
+                // Clear any previous results
+                resultsSection.innerHTML = '<h2>Search Results</h2>';
+
+                // If results are returned, display them
+                if (data && data.length > 0) {
+                    data.forEach(result => {
+                        // Create a new result item div
+                        const resultItem = document.createElement('div');
+                        resultItem.classList.add('result-item');
+
+                        // Add the result title
+                        const resultTitle = document.createElement('h3');
+                        resultTitle.textContent = result.title;
+
+                        // Add the result link
+                        const resultLink = document.createElement('a');
+                        resultLink.href = result.link;
+                        resultLink.target = '_blank';  // Open link in a new tab
+                        resultLink.textContent = result.link;
+
+                        // Append the title and link to the result item
+                        resultItem.appendChild(resultTitle);
+                        resultItem.appendChild(resultLink);
+
+                        // Append the result item to the results section
+                        resultsSection.appendChild(resultItem);
+                    });
+                } else {
+                    // If no results, display a message
+                    const noResults = document.createElement('p');
+                    noResults.textContent = 'No results found.
+                    Please try a different query.';
+                    resultsSection.appendChild(noResults);
+                }
             })
             .catch(error => console.error('Error:', error));
         });
