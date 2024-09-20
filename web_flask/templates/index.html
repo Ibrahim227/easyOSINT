@@ -98,19 +98,19 @@
                 <img id="preview" src="" alt="Image Preview" style="display: none; max-width: 300px; max-height: 300px;"/>
             </div>
         </div>
-        <form class="hidden-form">
+        <form action="/search" class="hidden-form" method="post">
             <h4>Search by</h4>
             <div class="form-group">
-                <input type="text" id="first-name" name="first-name" placeholder="first name">
+                <input type="text" id="first-name" name="query" placeholder="first name">
             </div>
             <div class="form-group">
-                <input type="text" id="last-name" name="last-name" placeholder="last name">
+                <input type="text" id="last-name" name="query" placeholder="last name">
             </div>
             <div class="form-group">
-                <input type="number" id="age" name="age" placeholder="age">
+                <input type="number" id="age" name="query" placeholder="age">
             </div>
             <div class="form-group">
-                <input type="email" id="email" name="email" placeholder="email">
+                <input type="email" id="email" name="query" placeholder="email">
             </div>
 <!--            <div class="form-group">-->
 <!--                <input type="number" id="height" name="height" placeholder="height (cm):">-->
@@ -304,7 +304,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);  // Display the search results
+                console.log(data);  // Log the search results to see if they are returned correctly
 
                 // Find the results section in the main content
                 const resultsSection = document.querySelector('main .scrollable-section');
@@ -339,8 +339,7 @@
                 } else {
                     // If no results, display a message
                     const noResults = document.createElement('p');
-                    noResults.textContent = 'No results found.
-                    Please try a different query.';
+                    noResults.textContent = 'No results found. Please try a different query.';
                     resultsSection.appendChild(noResults);
                 }
             })
