@@ -19,6 +19,7 @@ from db import init_db_command, get_db
 from user import User
 from search import SearchModel
 from searchSocial import SocialModel
+from searchCountry import CountryModel
 
 # load env variables
 load_dotenv()
@@ -296,6 +297,7 @@ def search():
     return jsonify(results), 200
 
 
+# Search Social Route
 @app.route('/searchSocial', methods=["POST"])
 def searchSocial():
     first_name = request.form['first-name']
@@ -310,7 +312,19 @@ def searchSocial():
     results = social_model.search_on_social_media()
 
     # Return or display results
-    return render_template('results.html', results=results)
+    return results
+
+
+# Search country route
+@app.route("/searchCountry", methods=["POST"])
+def searchCountry():
+    query = request.form['query']
+
+    # Create an instance of CountryModel and perform the search
+    country_model = CountryModel(query)
+    search_results = country_model.perform_search()
+
+    return search_results
 
 
 # Logout Route
