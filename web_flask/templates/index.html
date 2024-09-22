@@ -102,7 +102,7 @@
         <form action="/searchSocial" class="hidden-form" method="post">
             <h4>Search by</h4>
             <div class="form-group">
-                <input type="text" id="first-name" name="first-name" placeholder=" Twitter username">
+                <input type="text" id="first-name" name="first-name" placeholder="Twitter username" required>
             </div>
             <div class="form-group">
                 <input type="text" id="last-name" name="last-name" placeholder="LinkedIn username">
@@ -127,41 +127,48 @@
     </div>
 
     <main>
+        <!-- Dashboard Search Section -->
         <section class="scrollable-section">
             <h3>DASHBOARD</h3>
             <p>No Data</p>
         </section>
+
+        <!-- Default Search Section -->
         <section class="scrollable-section">
             <h2>Search Results</h2>
-            {% if results %}
-                {% for result in results %}
+            {% if default_results %}
+                {% for search_result in default_results %}
                 <div class="result-item">
-                    <h3>{{ result.title }}</h3>
-                    <a href="{{ result.link }}" target="_blank">{{ result.link }}</a>
+                    <h3>{{ search_result.title }}</h3>
+                    <a href="{{ search_result.link }}" target="_blank">{{ search_result.link }}</a>
                 </div>
                 {% endfor %}
             {% else %}
                 <p>No results yet. Enter a query and click search.</p>
             {% endif %}
         </section>
+
+        <!-- Social Media Search Section -->
         <section class="scrollable-section">
             <h2>Social Media Results</h2>
-            {% if results %}
-            <ul>
-                <li>Facebook: {{ results['facebook'] }}</li>
-                <li>Twitter: {{ results['twitter'] }}</li>
-                <li>LinkedIn: {{ results['linkedin'] }}</li>
-            </ul>
+            {% if social_results %}
+                <ul>
+                    <li>Facebook: {{ social_results['facebook'] }}</li>
+                    <li>Twitter: {{ social_results['twitter'] }}</li>
+                    <li>LinkedIn: {{ social_results['linkedin'] }}</li>
+                </ul>
             {% else %}
                 <p>No social media search results yet.</p>
             {% endif %}
         </section>
+
+        <!-- Country Search Section -->
         <section class="scrollable-section">
             <h2>Country Search Results</h2>
-            {% if results %}
+            {% if country_results %}
                 <ul>
-                    {% for result in results %}
-                    <li class="result-item">{{ result }}</li>
+                    {% for country_search in country_results %}
+                    <li class="result-item">{{ country_search }}</li>
                     {% endfor %}
                 </ul>
             {% else %}
