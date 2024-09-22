@@ -94,6 +94,7 @@ nav a.nav-item:hover {
     background-color: #218838;
 }
 
+/* Index search UI properties */
 .search-bar {
     display: flex;
     justify-content: center;
@@ -216,7 +217,7 @@ main {
 .person-form {
     display: flex;
     width: 650px;
-    height: 60vh;
+    height: 50vh;
     justify-content: center;
     align-items: center;
     background-color: ;
@@ -241,10 +242,10 @@ main {
     width: 60%;
 }
 
-}
 .hidden-form {
     display: flex;
     flex-direction: column;
+    background-color: ;
 }
 .hidden-form h4 {
     margin-bottom: 10px;
@@ -286,8 +287,75 @@ main {
 #search-hidden:hover {
     background-color: rgb(224, 155, 105);
 }
+
+/*Hidden country UI properties  */
+.country-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+    gap: 20px; /* Space between search and filter */
+}
+.country-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.country-container .search-icon {
+    position: absolute;
+    left: 460px;
+    color: #888;
+}
+#country-form input[type="text"] {
+    padding: 10px 10px 10px 35px; /* Space for search icon */
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+#country-form button#search-country {
+    padding: 10px 50px;
+    background-color: rgb(232, 122, 39);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#country-form button#search-country:hover {
+    background-color: rgb(224, 155, 105);
+}
+#country-cancel-btn {
+    padding: 10px 40px;
+    background-color: rgb(255, 0, 0);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 2px;
+}
+#country-cancel-btn:hover {
+    background-color: rgb(255, 51, 105);
+}
+/*#country{
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+#country-search-form {
+    background-color: ;
+    display: ;
+}*/
+
 /* Hidden form UI properties */
 
+/* Main section UI properties */
+.scrollable-section {
+}
 /* UI properties for Footer */
 .footer-container {
     background: black url(../img/new-bg.png) repeat;
