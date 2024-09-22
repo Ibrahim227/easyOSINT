@@ -300,19 +300,21 @@ def search():
 # Search Social Route
 @app.route('/searchSocial', methods=["POST"])
 def searchSocial():
-    first_name = request.form['first-name']
-    last_name = request.form['last-name']
-    age = request.form.get('age', None)
+    name = request.form.get('first-name')
     email = request.form.get('email', None)
 
-    # Create a SocialModel instance
-    social_model = SocialModel(first_name, last_name, age, email)
+    if not name:
+        return
 
-    # Perform the search
-    results = social_model.search_on_social_media()
+    else:
+        # Create a SocialModel instance
+        social_model = SocialModel(name, email)
 
-    # Return or display results
-    return results
+        # Perform the search
+        results = social_model.search_on_social_media()
+
+        # Return or display results
+        return results
 
 
 # Search country route
