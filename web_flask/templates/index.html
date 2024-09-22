@@ -40,6 +40,7 @@
                     <span>{{ session['name'] }}</span>
                  <a href="/logout" class="logout-btn">Logout</a>
                 </div>
+                <script>window.alert('log in successfully!');</script>
              {% else %}
                 <!-- Display the login and signup buttons if not logged in -->
                 <div class="auth-buttons">
@@ -80,8 +81,8 @@
     <div class="country-form" id="country-form" style="display: none;">
         <div class="country-container">
             <i class="fas fa-search search-icon"></i>
-            <form id="country-search-form" method="POST" action="/search">
-                <input type="text" name="query" placeholder="Search..." required>
+            <form id="country-search-form" method="POST" action="/searchCountry">
+                <input type="text" name="query" placeholder="Search Country" required>
                 <button type="submit" id="search-country">Search</button>
                 <button type="button" id="country-cancel-btn">Cancel</button>
             </form>
@@ -98,19 +99,19 @@
                 <img id="preview" src="" alt="Image Preview" style="display: none; max-width: 300px; max-height: 300px;"/>
             </div>
         </div>
-        <form action="/search" class="hidden-form" method="post">
+        <form action="/searchSocial" class="hidden-form" method="post">
             <h4>Search by</h4>
             <div class="form-group">
-                <input type="text" id="first-name" name="query" placeholder="first name">
+                <input type="text" id="first-name" name="first-name" placeholder=" Twitter username">
             </div>
             <div class="form-group">
-                <input type="text" id="last-name" name="query" placeholder="last name">
+                <input type="text" id="last-name" name="last-name" placeholder="LinkedIn username">
             </div>
+<!--            <div class="form-group">-->
+<!--                <input type="number" id="age" name="age" placeholder="age">-->
+<!--            </div>-->
             <div class="form-group">
-                <input type="number" id="age" name="query" placeholder="age">
-            </div>
-            <div class="form-group">
-                <input type="email" id="email" name="query" placeholder="email">
+                <input type="email" id="email" name="email" placeholder="email">
             </div>
 <!--            <div class="form-group">-->
 <!--                <input type="number" id="height" name="height" placeholder="height (cm):">-->
@@ -127,6 +128,10 @@
 
     <main>
         <section class="scrollable-section">
+            <h3>DASHBOARD</h3>
+            <p>No Data</p>
+        </section>
+        <section class="scrollable-section">
             <h2>Search Results</h2>
             {% if results %}
                 {% for result in results %}
@@ -140,14 +145,31 @@
             {% endif %}
         </section>
         <section class="scrollable-section">
-            <h2>Section 2</h2>
-            <p>Content for section 2...</p>
+            <h2>Social Media Results</h2>
+            {% if results %}
+            <ul>
+                <li>Facebook: {{ results['facebook'] }}</li>
+                <li>Twitter: {{ results['twitter'] }}</li>
+                <li>LinkedIn: {{ results['linkedin'] }}</li>
+            </ul>
+            {% else %}
+                <p>No social media search results yet.</p>
+            {% endif %}
         </section>
         <section class="scrollable-section">
-            <h2>Section 3</h2>
-            <p>Content for section 3...</p>
+            <h2>Country Search Results</h2>
+            {% if results %}
+                <ul>
+                    {% for result in results %}
+                    <li class="result-item">{{ result }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No results yet. Enter a query and click search</p>
+            {% endif %}
         </section>
     </main>
+
     <!-- Footer Section -->
     <footer class="footer-container">
         <div class="footer-left">
@@ -179,7 +201,7 @@
             const loginBtn = document.getElementById('login-btn');
             if (loginBtn) {
                 loginBtn.addEventListener('click', function() {
-                    window.location.href = '/login';
+                    window.location.href = '/user_login';
                 });
             }
 
