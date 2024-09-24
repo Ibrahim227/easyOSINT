@@ -217,7 +217,7 @@ def history():
 
 # Database functions
 def get_db():
-    conn = sqlite3.connect('sqlite_db')
+    conn = sqlite3.connect('../sqlite_db')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -370,3 +370,11 @@ def logout():
     session.pop('profile_pic', None)
     session.clear()
     return redirect(url_for('index'))
+
+
+if __name__ == "__main__":
+    from os import environ
+    from werkzeug.serving import run_simple
+
+    port = int(environ.get("PORT", 5000))
+    run_simple('0.0.0.0', port, app)
