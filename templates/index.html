@@ -9,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../static/img/logo_trial.png" rel="icon" type="image/x-icon">
     <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -37,10 +38,10 @@
              {% if session['logged_in'] %}
                  <!-- Display the user's name if logged in -->
                  <div class="user-info">
-                    <span>{{ session['name'] }}</span>
-                 <a href="/logout" class="logout-btn">Logout</a>
+                    <span>{{ session['name'] }}</span><hr>
+                    <a href="/logout" class="logout-btn">Logout</a>
                 </div>
-                <script>window.alert('log in successfully!');</script>
+<!--                <script>window.alert('log in successfully!');</script>-->
              {% else %}
                 <!-- Display the login and signup buttons if not logged in -->
                 <div class="auth-buttons">
@@ -127,36 +128,40 @@
     </div>
 
     <main>
-        <!-- Dashboard Search Section -->
-        <section class="scrollable-section">
-            <h3>DASHBOARD</h3>
-            <p>No Data</p>
-        </section>
-
         <!-- Default Search Section -->
         <section class="scrollable-section">
             <h2>Search Results</h2>
             {% if default_results %}
-                {% for search_result in default_results %}
-                <div class="result-item">
-                    <h3>{{ search_result.title }}</h3>
-                    <a href="{{ search_result.link }}" target="_blank">{{ search_result.link }}</a>
-                </div>
+                 {% for search in default_results %}
+                    <div class="result-item">
+                        <h3>{{ search.title }}</h3>
+                        <p>{{ search.snippet | safe }}</p>
+                        <a href="{{ search.link }}" target="_blank">Read more...</a>
+                    </div>
                 {% endfor %}
             {% else %}
-                <p>No results yet. Enter a query and click search.</p>
+                <p>No results found. Try another search.</p>
             {% endif %}
         </section>
 
-        <!-- Social Media Search Section -->
+        <!-- Dashboard Search Section -->
         <section class="scrollable-section">
+            <h3>DASHBOARD</h3>
+            <div class="graphic">
+                <canvas id="disp-data"></canvas>
+            </div>
+        </section>
+
+        <!-- Social Media Search Section -->
+        <section class="scrollable-section" id="social">
             <h2>Social Media Results</h2>
             {% if social_results %}
-                <ul>
-                    <li>Facebook: {{ social_results['facebook'] }}</li>
-                    <li>Twitter: {{ social_results['twitter'] }}</li>
-                    <li>LinkedIn: {{ social_results['linkedin'] }}</li>
-                </ul>
+                <div class="nav">
+                    <div><p>LinkedIn: {{ social_results['linkedin'] }}</p></div>
+                    <div><p>Twitter: {{ social_results['twitter'] }}</p></div>
+                    <div><p>Facebook: {{ social_results['facebook'] }}</p></div>
+                    <div><p>TikTok: {{ social_results['tiktok'] }}</p></div>
+                </div>
             {% else %}
                 <p>No social media search results yet.</p>
             {% endif %}
@@ -166,11 +171,9 @@
         <section class="scrollable-section">
             <h2>Country Search Results</h2>
             {% if country_results %}
-                <ul>
-                    {% for country_search in country_results %}
-                    <li class="result-item">{{ country_search }}</li>
-                    {% endfor %}
-                </ul>
+                {% for country_search in country_results %}
+                    <div class="result">{{ country_search }}</div>
+                {% endfor %}
             {% else %}
                 <p>No results yet. Enter a query and click search</p>
             {% endif %}
@@ -352,14 +355,19 @@
                         const resultTitle = document.createElement('h3');
                         resultTitle.textContent = result.title;
 
+                        // Add the result snippet
+                        const resultSnippet = document.createElement('p');
+                        resultSnippet.innerHTML = result.snippet; // This can contain HTML, so we use innerHTML
+
                         // Add the result link
                         const resultLink = document.createElement('a');
                         resultLink.href = result.link;
                         resultLink.target = '_blank';  // Open link in a new tab
-                        resultLink.textContent = result.link;
+                        resultLink.textContent = 'Read more...';
 
-                        // Append the title and link to the result item
+                        // Append the title, snippet, and link to the result item
                         resultItem.appendChild(resultTitle);
+                        resultItem.appendChild(resultSnippet);
                         resultItem.appendChild(resultLink);
 
                         // Append the result item to the results section
