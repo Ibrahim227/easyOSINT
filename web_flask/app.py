@@ -199,10 +199,20 @@ def callback():
     return redirect(url_for('index'))
 
 
-@app.route('/history', methods=["GET", "POST"])
+@app.route('/history', methods=["GET"])
 def history():
-    if request.method == "GET":
-        return render_template('history.html')
+    if 'logged_in' not in session or not session['logged_in']:
+        flash('Please log in to see your search history.')
+        return redirect(url_for('user_login'))
+
+    # Fetch search history for the logged-in user
+    user_id = session['user_id']
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM search_history WHERE user_id = ? ORDER BY created_at DESC', (user_id,))
+    search_history = cur.fetchall()
+
+    return render_template('history.html', search_history=search_history)
 
 
 # Database functions
@@ -282,21 +292,25 @@ def user_login():
 # search route
 @app.route('/search', methods=['POST'])
 def search():
+    query = request.form.get('query')  # Get the search query from the form
+
+    if not query:
+        return jsonify([])
+
+    # Instantiate the search model and perform the search
+    search_model = SearchModel(query)
+    default_results = search_model.perform_search()
+
     if 'logged_in' in session and session['logged_in']:
+        user_id = session.get('user_id')
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute('INSERT INTO search_history (id, user_id, query, result) VALUES (?, ?, ?, ?)',
+                    (str(uuid4()), user_id, query, str(default_results)))
+        conn.commit()
 
-        query = request.form.get('query')  # Get the search query from the form
-
-        if not query:
-            return jsonify([])
-
-        # Instantiate the search model and perform the search
-        search_model = SearchModel(query)
-        default_results = search_model.perform_search()
-
-        # Return the search results as JSON
-        return jsonify(default_results)
-    else:
-        return jsonify(f"{"Error": Please login to perform seearch}"), 403
+    # Return the search results as JSON
+    return jsonify(default_results)
 
 
 # Search Social Route
@@ -315,6 +329,14 @@ def searchSocial():
         # Perform the search
         social_results = social_model.search_on_social_media()
 
+        if 'logged_in' in session and session['logged_in']:
+            user_id = session.get('user_id')
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute('INSERT INTO search_history (id, user_id, query, result) VALUES (?, ?, ?, ?)',
+                        (str(uuid4()), user_id, name, str(social_results)))
+            conn.commit()
+
         # Return or display results
         return render_template('index.html', social_results=social_results)
 
@@ -328,6 +350,14 @@ def searchCountry():
     country_model = CountryModel(query)
     country_results = country_model.perform_search()
 
+    if 'logged_in' in session and session['logged_in']:
+        user_id = session.get('user_id')
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute('INSERT INTO search_history (id, user_id, query, result) VALUES (?, ?, ?, ?)',
+                    (str(uuid4()), user_id, query, str(country_results)))
+        conn.commit()
+
     return render_template('index.html', country_results=country_results)
 
 
@@ -338,6 +368,7 @@ def logout():
     session.pop('name', None)
     session.pop('email', None)
     session.pop('profile_pic', None)
+    session.clear()
     return redirect(url_for('index'))
 
 
