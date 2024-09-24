@@ -55,14 +55,11 @@ class SocialModel:
 
         try:
             response = requests.get(url, headers=headers)
-            resp = requests.get(url2, headers=headers)
-            if response.status_code == 200 and resp.status_code == 200:
+            if response.status_code == 200:
                 data = response.json()
-                user_data = resp.json()
                 print(data)
-                print(user_data)
+                print(response.headers.get('x-rate-limit-reset'))
                 profile = {
-                    "Rate-limit": response.headers.get('x-rate-limit-reset'),
                     "id": data["data"]["id"],
                     "username": data["data"]["username"],
                     "full_name": data["data"]["name"],
@@ -70,7 +67,7 @@ class SocialModel:
                     "last_tweet": "N/A"  # You would need another API call to get the actual last tweet
                 }
 
-                return profile, user_data
+                return profile
 
             else:
                 return f"Error fetching data from Twitter: {response.status_code}"
@@ -90,7 +87,7 @@ class SocialModel:
     def search_linkedin(self):
         # LinkedIn API (You need to sign up for LinkedIn's Developer program)
         # Requires OAuth 2.0 authentication
-        access_token = 'YOUR_LINKEDIN_ACCESS_TOKEN'
+        access_token = os.getenv('LINKEDIN_ACCESS_TOKEN')
         url = "https://api.linkedin.com/v2/me"
 
         headers = {
