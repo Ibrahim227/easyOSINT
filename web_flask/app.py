@@ -283,18 +283,16 @@ def user_login():
 @app.route('/search', methods=['POST'])
 def search():
     query = request.form.get('query')  # Get the search query from the form
+
     if not query:
-        return jsonify({"error": "No search query provided"}), 400
+        return jsonify([])
 
     # Instantiate the search model and perform the search
     search_model = SearchModel(query)
-    results = search_model.perform_search()
-
-    if 'error' in results:
-        return jsonify(results), 500
+    default_results = search_model.perform_search()
 
     # Return the search results as JSON
-    return jsonify(results), 200
+    return jsonify(default_results)
 
 
 # Search Social Route
@@ -311,22 +309,22 @@ def searchSocial():
         social_model = SocialModel(name, email)
 
         # Perform the search
-        results = social_model.search_on_social_media()
+        social_results = social_model.search_on_social_media()
 
         # Return or display results
-        return results
+        return render_template('index.html', social_results=social_results)
 
 
 # Search country route
 @app.route("/searchCountry", methods=["POST"])
 def searchCountry():
-    query = request.form['query']
+    query = request.form.get('query')
 
     # Create an instance of CountryModel and perform the search
     country_model = CountryModel(query)
-    search_results = country_model.perform_search()
+    country_results = country_model.perform_search()
 
-    return search_results
+    return render_template('index.html', country_results=country_results)
 
 
 # Logout Route
