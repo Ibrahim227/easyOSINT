@@ -1,15 +1,5 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "easyOSINT/app.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "easyOSINT/app.py"
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/app" }
   ]
 }
