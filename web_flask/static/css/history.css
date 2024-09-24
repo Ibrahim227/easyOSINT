@@ -40,6 +40,55 @@ header #datetime-display {
     align-items: center;
     justify-content: center;
 }
+/*UI properties for main. section*/
+section.hist {
+    display: flex;
+    margin: 15px 0 0 20px;
+    background-color: ;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.1);
+    padding: 0;
+}
+section.hist h2{
+    margin: 0 0 0 0;
+    padding: 0;
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.1);
+}
+ul.nav {
+    width: auto;
+    height: auto;
+    display: relative;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    margin: 0 0 0 50px;
+    padding: 0;
+}
+.nav li {
+}
+/*.nav li:last-child {
+    border-right: 1px solid #2c323d;
+}
+.nav a {
+    position: relative;
+    display: block;
+    line-height: 3.875;
+    padding: 0 24px 0 53px;
+    color: var(--nav-link-color);
+}
+.nav a:hover {
+    background-color: #13151a;
+}
+.nav small em {
+    position: absolute;
+    top: 21px;
+    left: 24px;
+    font-size: 20px;
+}*/
+
+/*UI properties for main. section*/
+
 /* UI properties for Footer */
 .footer-container {
     background: black url(../img/new-bg.png) repeat;
