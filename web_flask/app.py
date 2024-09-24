@@ -282,17 +282,21 @@ def user_login():
 # search route
 @app.route('/search', methods=['POST'])
 def search():
-    query = request.form.get('query')  # Get the search query from the form
+    if 'logged_in' in session and session['logged_in']:
 
-    if not query:
-        return jsonify([])
+        query = request.form.get('query')  # Get the search query from the form
 
-    # Instantiate the search model and perform the search
-    search_model = SearchModel(query)
-    default_results = search_model.perform_search()
+        if not query:
+            return jsonify([])
 
-    # Return the search results as JSON
-    return jsonify(default_results)
+        # Instantiate the search model and perform the search
+        search_model = SearchModel(query)
+        default_results = search_model.perform_search()
+
+        # Return the search results as JSON
+        return jsonify(default_results)
+    else:
+        return jsonify(f"{"Error": Please login to perform seearch}"), 403
 
 
 # Search Social Route
