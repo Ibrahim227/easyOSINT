@@ -13,7 +13,11 @@
 <body>
     <header>
         <div class="container">
-            <label class="fas fa-history"></label>History
+            <!-- Back Arrow Section -->
+            <div class="back-arrow" onclick="window.history.back();">
+                <i class="fas fa-arrow-left"></i> Back
+            </div>
+            <i class="hist"></i>History
             <div id="datetime-display"></div>
             <script>
                 function updateDateTime() {
@@ -30,13 +34,24 @@
                 setInterval(updateDateTime, 1000);
             </script>
         </div>
-        <!-- Back Arrow Section -->
-        <div class="back-arrow" onclick="window.history.back();">
-            <i class="fas fa-arrow-left"></i> Back
-        </div>
+
     </header>
     <main>
-        <section>
+        <section class="hist">
+            <h2>Your Search History</h2>
+            {% if search_history %}
+                <ul class="nav">
+                    {% for search in search_history %}
+                        <li>
+                            <strong>Query:</strong> {{ search['query'] }} <br><hr>
+                            <small><em>Searched on: | {{ search['created_at'] }}</em></small><br>
+                            <!--                            <strong>Result:</strong> {{ search['result'] }} <br>--><br>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You have no search history yet.</p>
+            {% endif %}
         </section>
     </main>
     <footer class="footer-container">
