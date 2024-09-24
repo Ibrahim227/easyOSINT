@@ -2,15 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/app.py",
-      "use": "@vercel/python",
-      "config": {"runtime": "python3.12"}
+      "src": "easyOSINT/wsgi.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/api/app.py"
+      "dest": "easyOSINT/wsgi.py:app"
     }
   ]
 }

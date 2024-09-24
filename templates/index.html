@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="easyOSINT">
+    <title>easyOSINT</title>
+    <!-- Link to Font Awesome CDN for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="../static/img/logo_trial.png" rel="icon" type="image/x-icon">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../static/img/logo_trial.png" alt="Logo">
+        </div>
+
+        <nav class="nav-links">
+            <a href="/" class="nav-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <hr>
+            <a href="/history" class="nav-item">
+                <i class="fas fa-history"></i> History
+            </a>
+        </nav>
+
+        <!-- Conditional rendering based on whether the user is logged in -->
+         <div class="auth-section">
+             <!-- Profile Image -->
+             <div class="profile-image">
+                 <img src="../static/img/profile.png" alt="Profile" id="profile-pic">
+             </div>
+
+             {% if session['logged_in'] %}
+                 <!-- Display the user's name if logged in -->
+                 <div class="user-info">
+                    <span>{{ session['name'] }}</span><hr>
+                    <a href="/logout" class="logout-btn">Logout</a>
+                </div>
+<!--                <script>window.alert('log in successfully!');</script>-->
+             {% else %}
+                <!-- Display the login and signup buttons if not logged in -->
+                <div class="auth-buttons">
+                    <button class="login-btn" id="login-btn">Login</button>
+                    <button class="signup-btn" id="signup-btn">Sign Up</button>
+                </div>
+             {% endif %}
+        </div>
+    </header>
+
+    <div class="search-bar" id="search-bar">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <form id="search-form" method="POST" action="/search">
+                <input type="text" name="query"  id="search_query" placeholder="Search..." required>
+                <button type="submit" class="">Search</button>
+            </form>
+        </div>
+        <div class="filter-container">
+            <button class="filter-button">
+                <i class="fas fa-filter"></i> Filter by
+            </button>
+            <div class="custom-dropdown">
+                <div class="dropdown-option" data-value="country">
+                    <i class="fas fa-globe"></i> Country
+                </div>
+                <div class="dropdown-option" data-value="person" id="filter-person">
+                    <i class="fas fa-user"></i> Person
+                </div>
+<!--                <div class="dropdown-option" data-value="enterprise">-->
+<!--                    <i class="fas fa-building"></i> Enterprise-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Country Form, initially hidden -->
+    <div class="country-form" id="country-form" style="display: none;">
+        <div class="country-container">
+            <i class="fas fa-search search-icon"></i>
+            <form id="country-search-form" method="POST" action="/searchCountry">
+                <input type="text" name="query" placeholder="Search Country" required>
+                <button type="submit" id="search-country">Search</button>
+                <button type="button" id="country-cancel-btn">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+     <!-- Person Form, initially hidden -->
+    <div class="person-form" id="person-form" style="display: none;">
+        <div class="left-section">
+            <label for="photo">Upload Photo:</label>
+            <input type="file" id="photo" name="photo" accept="image/*">
+            <!-- Image Preview Box -->
+            <div id="image-preview" style="margin-top: 10px;">
+                <img id="preview" src="" alt="Image Preview" style="display: none; max-width: 300px; max-height: 300px;"/>
+            </div>
+        </div>
+        <form action="/searchSocial" class="hidden-form" method="post">
+            <h4>Search by</h4>
+            <div class="form-group">
+                <input type="text" id="first-name" name="first-name" placeholder="Twitter username" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="last-name" name="last-name" placeholder="LinkedIn username">
+            </div>
+<!--            <div class="form-group">-->
+<!--                <input type="number" id="age" name="age" placeholder="age">-->
+<!--            </div>-->
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder="email">
+            </div>
+<!--            <div class="form-group">-->
+<!--                <input type="number" id="height" name="height" placeholder="height (cm):">-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <input type="number" id="weight" name="weight" placeholder="weight (kg)">-->
+<!--            </div>-->
+            <div class="bottom-section">
+                <button id="search-hidden">Search</button>
+                <button type="button" class="cancel-btn" id="cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <main>
+        <!-- Default Search Section -->
+        <section class="scrollable-section">
+            <h2>Search Results</h2>
+            {% if default_results %}
+                 {% for search in default_results %}
+                    <div class="result-item">
+                        <h3>{{ search.title }}</h3>
+                        <p>{{ search.snippet | safe }}</p>
+                        <a href="{{ search.link }}" target="_blank">Read more...</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No results found. Try another search.</p>
+            {% endif %}
+        </section>
+
+        <!-- Dashboard Search Section -->
+        <section class="scrollable-section">
+            <h3>DASHBOARD</h3>
+            <div class="graphic">
+                <canvas id="disp-data"></canvas>
+            </div>
+        </section>
+
+        <!-- Social Media Search Section -->
+        <section class="scrollable-section" id="social">
+            <h2>Social Media Results</h2>
+            {% if social_results %}
+                <div class="nav">
+                    <div><p>LinkedIn: {{ social_results['linkedin'] }}</p></div>
+                    <div><p>Twitter: {{ social_results['twitter'] }}</p></div>
+                    <div><p>Facebook: {{ social_results['facebook'] }}</p></div>
+                    <div><p>TikTok: {{ social_results['tiktok'] }}</p></div>
+                </div>
+            {% else %}
+                <p>No social media search results yet.</p>
+            {% endif %}
+        </section>
+
+        <!-- Country Search Section -->
+        <section class="scrollable-section">
+            <h2>Country Search Results</h2>
+            {% if country_results %}
+                {% for country_search in country_results %}
+                    <div class="result">{{ country_search }}</div>
+                {% endfor %}
+            {% else %}
+                <p>No results yet. Enter a query and click search</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer-container">
+        <div class="footer-left">
+            <div class="footer-logo">
+                <img src="../static/img/logo_trial.png" alt="Logo">
+            </div>
+        </div>
+        <div class="footer-right">
+            <div class="footer-info">
+                <p>&copy; 2024 easyOSINT. All rights reserved.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <!--
+            <div class="footer-social">
+                <a href="https://github.com/Ibrahim227" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/maman-sani-ibrahim" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://x.com/msaniibrahim_" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div> -->
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attach event listener to Login button
+            const loginBtn = document.getElementById('login-btn');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function() {
+                    window.location.href = '/user_login';
+                });
+            }
+
+            // Attach event listener to Signup button
+            const signupBtn = document.getElementById('signup-btn');
+            if (signupBtn) {
+                signupBtn.addEventListener('click', function() {
+                    window.location.href = '/signup';
+                });
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle the dropdown on filter button click
+            document.querySelector('.filter-button').addEventListener('click', function() {
+                this.parentElement.classList.toggle('show-dropdown');
+            });
+
+            // Handle dropdown option clicks
+            const dropdownOptions = document.querySelectorAll('.dropdown-option');
+            dropdownOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    console.log('Filter by:', this.getAttribute('data-value'));
+                    document.querySelector('.filter-button').innerHTML = '<i class="fas fa-filter"></i> Filter by ' + ':' + ' ' + this.innerText;
+                    document.querySelector('.filter-container').classList.remove('show-dropdown');
+                });
+            });
+
+            // Get the elements
+            const personForm = document.getElementById('person-form');
+            const searchBar = document.querySelector('.search-bar');
+            const cancelBtn = document.getElementById('cancel-btn');
+            const filterButton = document.querySelector('.filter-button');
+            const countryForm = document.getElementById('country-form');
+            const countryCancelBtn = document.getElementById('country-cancel-btn');  // Country cancel button
+
+            // Only add event listener if the cancel button exists (for Person filter)
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function() {
+                    // Hide the person form and show the search bar
+                    personForm.style.display = 'none';  // Hide the person form
+                    searchBar.style.display = '';       // Show the search bar
+                    filterButton.innerHTML = '<i class="fas fa-filter"></i> Filter by'; // Reset filter button text
+                    document.querySelector('.filter-container').classList.remove('show-dropdown');
+                });
+            }
+
+            // Only add event listener if the country cancel button exists (for Country filter)
+            if (countryCancelBtn) {
+                countryCancelBtn.addEventListener('click', function() {
+                    // Hide the country form and show the search bar
+                    countryForm.style.display = 'none'; // Hide the country form
+                    searchBar.style.display = '';       // Show the search bar
+                    filterButton.innerHTML = '<i class="fas fa-filter"></i> Filter by'; // Reset filter button text
+                    document.querySelector('.filter-container').classList.remove('show-dropdown');
+                });
+            }
+
+            // Handle the filter option for "Person" (hides the search bar and shows the person form)
+            const personFilter = document.querySelector('[data-value="person"]');
+            if (personFilter) {
+                personFilter.addEventListener('click', function() {
+                    searchBar.style.display = 'none';  // Hide the search bar
+                    personForm.style.display = 'flex';  // Show the person form
+                    countryForm.style.display = 'none';  // Hide the country form, in case it was visible
+                });
+            }
+
+            // Handle the filter option for "Country" (hides the search bar and shows the country form)
+            const countryFilter = document.querySelector('[data-value="country"]');
+            if (countryFilter) {
+                countryFilter.addEventListener('click', function() {
+                    searchBar.style.display = 'none';   // Hide the search bar
+                    countryForm.style.display = 'block'; // Show the country form
+                    personForm.style.display = 'none';  // Hide the person form, in case it was visible
+                });
+            }
+
+            // Handle other filter options, showing search bar and hiding the person and country forms
+            dropdownOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    if (this.getAttribute('data-value') !== 'person' && this.getAttribute('data-value') !== 'country') {
+                        searchBar.style.display = 'flex';    // Show the search bar for other filters
+                        personForm.style.display = '';   // Hide the person form
+                        countryForm.style.display = 'none';  // Hide the country form
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        document.getElementById('photo').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview');
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';  // Show the preview image
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '';
+                preview.style.display = 'none';  // Hide the preview if no image is selected
+            }
+        });
+    </script>
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the form from reloading the page
+
+            // Send the search query using AJAX
+            const formData = new FormData(this);
+            const query = formData.get('query');
+
+            fetch('/search', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);  // Log the search results to see if they are returned correctly
+
+                // Find the results section in the main content
+                const resultsSection = document.querySelector('main .scrollable-section');
+
+                // Clear any previous results
+                resultsSection.innerHTML = '<h2>Search Results</h2>';
+
+                // If results are returned, display them
+                if (data && data.length > 0) {
+                    data.forEach(result => {
+                        // Create a new result item div
+                        const resultItem = document.createElement('div');
+                        resultItem.classList.add('result-item');
+
+                        // Add the result title
+                        const resultTitle = document.createElement('h3');
+                        resultTitle.textContent = result.title;
+
+                        // Add the result snippet
+                        const resultSnippet = document.createElement('p');
+                        resultSnippet.innerHTML = result.snippet; // This can contain HTML, so we use innerHTML
+
+                        // Add the result link
+                        const resultLink = document.createElement('a');
+                        resultLink.href = result.link;
+                        resultLink.target = '_blank';  // Open link in a new tab
+                        resultLink.textContent = 'Read more...';
+
+                        // Append the title, snippet, and link to the result item
+                        resultItem.appendChild(resultTitle);
+                        resultItem.appendChild(resultSnippet);
+                        resultItem.appendChild(resultLink);
+
+                        // Append the result item to the results section
+                        resultsSection.appendChild(resultItem);
+                    });
+                } else {
+                    // If no results, display a message
+                    const noResults = document.createElement('p');
+                    noResults.textContent = 'No results found. Please try a different query.';
+                    resultsSection.appendChild(noResults);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
