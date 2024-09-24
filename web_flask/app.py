@@ -250,7 +250,7 @@ def signup():
             session['logged_in'] = True
             session['name'] = name
 
-            return redirect(url_for('index'))  # redirect to homepage
+            return redirect(url_for('user_login'))  # redirect to homepage
 
         except sqlite3.IntegrityError:
             return "User already exists"
