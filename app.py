@@ -15,11 +15,11 @@ from oauthlib.oauth2 import WebApplicationClient
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 # Internal imports
-from db import init_db_command, get_db
-from user import User
-from search import SearchModel
-from searchSocial import SocialModel
-from searchCountry import CountryModel
+from api.db import init_db_command, get_db
+from api.user import User
+from api.search import SearchModel
+from api.searchSocial import SocialModel
+from api.searchCountry import CountryModel
 
 # load env variables
 load_dotenv()
