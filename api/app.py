@@ -71,7 +71,8 @@ except sqlite3.OperationalError:
 
 
 def get_user_from_db(email):
-    db = get_db()
+    db = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'sqlite_db'))
+
     return db.execute('SELECT * FROM user WHERE email = ?', (email,)).fetchone()
 
 
