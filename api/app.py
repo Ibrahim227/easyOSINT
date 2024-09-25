@@ -317,29 +317,54 @@ def search():
 # Search Social Route
 @app.route('/searchSocial', methods=["POST"])
 def searchSocial():
-    name = request.form.get('first-name')
+    twitter = request.form.get('twitter')
+    linkedin = request.form.get('linkedin')
+    facebook = request.form.get('facebook')
+    tiktok = request.form.get('tiktok')
     email = request.form.get('email', None)
 
-    if not name:
-        return
+    if not (twitter or linkedin or facebook or tiktok or email):
+        return render_template('index.html', error="Please provide at least one social media handle or email.")
 
-    else:
-        # Create a SocialModel instance
-        social_model = SocialModel(name, email)
+    social_results = {}
 
-        # Perform the search
-        social_results = social_model.search_on_social_media()
+    if twitter:
+        social_model = SocialModel(twitter)
+        social_results['twitter'] = social_model.search_twitter()
 
-        if 'logged_in' in session and session['logged_in']:
-            user_id = session.get('user_id')
-            conn = get_db()
-            cur = conn.cursor()
-            cur.execute('INSERT INTO search_history (id, user_id, query, result) VALUES (?, ?, ?, ?)',
-                        (str(uuid4()), user_id, name, str(social_results)))
-            conn.commit()
+        log_search_to_db('twitter', twitter, social_results['twitter'])
 
-        # Return or display results
-        return render_template('index.html', social_results=social_results)
+    if linkedin:
+        social_model = SocialModel(linkedin)
+        social_results['linkedin'] = social_model.search_linkedin()
+
+        log_search_to_db('linkedin', linkedin, social_results['linkedin'])
+
+    if facebook:
+        social_model = SocialModel(facebook)
+        social_results['facebook'] = social_model.search_facebook()
+
+        log_search_to_db('facebook', facebook, social_results['facebook'])
+
+    if tiktok:
+        social_model = SocialModel(tiktok)
+        social_results['tiktok'] = social_model.search_tiktok()
+
+        log_search_to_db('tiktok', tiktok, social_results['tiktok'])
+
+    # Return or display results
+    return render_template('index.html', social_results=social_results)
+
+
+# Helper function to log search results into the database
+def log_search_to_db(platform, query, result):
+    if 'logged_in' in session and session['logged_in']:
+        user_id = session.get('user_id')
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute('INSERT INTO search_history (id, user_id, query, result) VALUES (?, ?, ?, ?)',
+                    (str(uuid4()), user_id, f"{platform}: {query}", str(result)))
+        conn.commit()
 
 
 # Search country route
@@ -371,6 +396,7 @@ def logout():
     session.pop('profile_pic', None)
     session.clear()
     return redirect(url_for('index'))
+
 
 #
 if __name__ == "__main__":
