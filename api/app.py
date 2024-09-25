@@ -217,7 +217,7 @@ def history():
 
 # Database functions
 def get_db():
-    conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), 'sqlite_db'))
+    conn = sqlite3.connect('sqlite_db')
 
     conn.row_factory = sqlite3.Row
     return conn
