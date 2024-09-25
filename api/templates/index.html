@@ -103,23 +103,21 @@
         <form action="/searchSocial" class="hidden-form" method="post">
             <h4>Search by</h4>
             <div class="form-group">
-                <input type="text" id="first-name" name="first-name" placeholder="Twitter username" required>
+                <input type="text" id="first-name" name="twitter" placeholder="Twitter username" required>
             </div>
             <div class="form-group">
-                <input type="text" id="last-name" name="last-name" placeholder="LinkedIn username">
+                <input type="text" id="last-name" name="linkedin" placeholder="LinkedIn username">
             </div>
-<!--            <div class="form-group">-->
-<!--                <input type="number" id="age" name="age" placeholder="age">-->
-<!--            </div>-->
+            <div class="form-group">
+                <input type="text" id="facebook" name="facebook" placeholder="Facebook username">
+            </div>
+            <div class="form-group">
+                <input type="text" id="tiktok" name="tiktok" placeholder="Tiktok username">
+            </div>
             <div class="form-group">
                 <input type="email" id="email" name="email" placeholder="email">
             </div>
-<!--            <div class="form-group">-->
-<!--                <input type="number" id="height" name="height" placeholder="height (cm):">-->
-<!--            </div>-->
-<!--            <div class="form-group">-->
-<!--                <input type="number" id="weight" name="weight" placeholder="weight (kg)">-->
-<!--            </div>-->
+
             <div class="bottom-section">
                 <button id="search-hidden">Search</button>
                 <button type="button" class="cancel-btn" id="cancel-btn">Cancel</button>
@@ -130,7 +128,7 @@
     <main>
         <!-- Default Search Section -->
         <section class="scrollable-section">
-            <h2><i class="fas fa-search search-icon"></i> Search Results</h2>
+            <h2>Search Results</h2>
             {% if default_results %}
                  {% for search in default_results %}
                     <div class="result-item">
@@ -154,7 +152,7 @@
 
         <!-- Social Media Search Section -->
         <section class="scrollable-section" id="social">
-            <h2><i class="fas fa-hashtag"></i>Social Media Results</h2>
+            <h2><i class="fas fa-hashtag"></i> Social Media Results</h2>
             {% if social_results %}
                 <div class="nav">
                     <div><p><i class="fab fa-linkedin"></i> LinkedIn: {{ social_results['linkedin'] }}</p></div>
