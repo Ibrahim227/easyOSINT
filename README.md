@@ -17,8 +17,8 @@ and strategic planning. This information can come from a wide variety of sources
 <p>Run the following command in your terminal:</p>
 
 >git clone <repository_name.git>
-> cd <repository_name>
-> python3 wsgi.py
+>cd <repository_name><br>
+>python3 wsgi.py
 
 <br>
 <p>You will see:</p>
