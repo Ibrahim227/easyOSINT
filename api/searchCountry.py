@@ -46,15 +46,12 @@ class CountryModel:
                 'Borders': country_info.get('borders', 'N/A'),
                 'Flag': country_info.get('flag', 'N/A'),
                 'Cioc': country_info.get('cioc', 'N/A'),
-                'Languages': ', '.join(country_info.get('languages', {}).values())
+                'Languages': ', '.join(country_info.get('languages', {}).values()),
+                #
+                'Latitude': country_info.get('latlng', [])[0] if country_info.get('latlng') else None,
+                'Longitude': country_info.get('latlng', [])[1] if country_info.get('latlng') else None,
+
             }
             return [result]  # Return a list of dictionaries
         else:
             return ["No results found."]
-#
-# Example usage
-# if __name__ == "__main__":
-#     country_model = CountryModel("Niger")
-#     search_results = country_model.perform_search()
-#     for result in search_results:
-#         print(result)
