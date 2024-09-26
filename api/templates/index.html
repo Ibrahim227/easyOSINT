@@ -147,6 +147,97 @@
             <h2><i class="fas fa-tachometer-alt"></i> DASHBOARD</h2>
             <div class="graphic">
                 <canvas id="disp-data"></canvas>
+                <script>
+                    // Initialize the chart globally
+                    let chart;
+
+                    // Function to fetch stock data from your backend
+                    async function fetchStockData() {
+                        const response = await fetch('/api/get-stock-data');
+                        const stockData = await response.json();
+                        return stockData;
+                    }
+
+                    // Function to generate the chart using Chart.js
+                    function generateChart(stockData) {
+                        const ctx = document.getElementById('disp-data').getContext('2d');
+
+                        chart = new Chart(ctx, {
+                            type: 'line', // Line chart for stock data
+                            data: {
+                                labels: stockData.timestamps, // X-axis labels (time)
+                                datasets: [
+                                    {
+                                        label: 'EU',
+                                        data: stockData.eu, // Y-axis data for EU
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'Wall Street',
+                                        data: stockData.wallstreet, // Y-axis data for Wall Street
+                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'London',
+                                        data: stockData.london, // Y-axis data for London
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        fill: false
+                                    },
+                                    {
+                                        label: 'China',
+                                        data: stockData.china, // Y-axis data for China
+                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        fill: false
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: 'Time'
+                                        }
+                                    },
+                                    y: {
+                                        title: {
+                                            display: true,
+                                            text: 'Stock Price'
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    // Function to update the chart with new data
+                    async function updateChart() {
+                        const stockData = await fetchStockData();
+
+                        if (chart) {
+                            // Update chart data
+                            chart.data.labels = stockData.timestamps;
+                            chart.data.datasets[0].data = stockData.eu;
+                            chart.data.datasets[1].data = stockData.wallstreet;
+                            chart.data.datasets[2].data = stockData.london;
+                            chart.data.datasets[3].data = stockData.china;
+                            chart.update();
+                        } else {
+                            // If the chart doesn't exist, generate it
+                            generateChart(stockData);
+                        }
+                    }
+
+                    // Update the chart every 30 seconds
+                    setInterval(updateChart, 30000);
+
+                    // Initially fetch and render the chart
+                    updateChart();
+                </script>
+
             </div>
         </section>
 
@@ -172,7 +263,7 @@
                 {% for country_search in country_results %}
                     <div class="result">
                         <h3>{{ country_search['Name'] }}</h3>
-                        <ul>
+                        <ul class="country">
                             <li><strong>Capital:</strong> {{ country_search['Capital'] }}</li>
                             <li><strong>Region:</strong> {{ country_search['Region'] }}</li>
                             <li><strong>Subregion:</strong> {{ country_search['Subregion'] }}</li>
@@ -180,14 +271,23 @@
                             <li><strong>Area:</strong> {{ country_search['Area'] }} km²</li>
                             <li><strong>Currencies:</strong> {{ country_search['Currencies'] | safe }}</li>
                             <li><strong>Alternative Spellings:</strong> {{ country_search['SltSpellings'] | join(', ') }}</li>
-                            <li><strong>Languages:</strong> {{ country_search['Languages'] }}</li>
-                            <li><strong>Latitude & Longitude:</strong> {{ country_search['LatitudeLongitude'] | join(', ') }}</li>
-                            <li><strong>Gini Coefficient:</strong> {{ country_search['Gini'] }}</li>
-                            <li><strong>Timezones:</strong> {{ country_search['Timezones'] | join(', ') }}</li>
                             <li><strong>Borders:</strong> {{ country_search['Borders'] | join(', ') }}</li>
-                            <li><strong>Flag:</strong> {{ country_search['Flag'] }}</li>
+                            <li><strong>Latitude & Longitude:</strong> {{ country_search['LatitudeLongitude'] | join(', ') }}</li>
                             <li><strong>CIOC Code:</strong> {{ country_search['Cioc'] }}</li>
+                            <li><strong>Languages:</strong> {{ country_search['Languages'] }}</li>
                         </ul>
+                        <!-- Display Google Map if latitude and longitude are available -->
+                        {% if country_search['Latitude'] and country_search['Longitude'] %}
+                            <h4>Map:</h4>
+                            <iframe
+                                width="600"
+                                height="450"
+                                frameborder="0" style="border:0"
+                                src="https://www.google.com/maps/embed/v1/view?key=YOUR_GOOGLE_MAPS_API_KEY
+                                &center={{ country_search['Latitude'] }},{{ country_search['Longitude'] }}
+                                &zoom=6&maptype=roadmap" allowfullscreen>
+                            </iframe>
+                        {% endif %}
                     </div>
                 {% endfor %}
             {% else %}
