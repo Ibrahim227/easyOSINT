@@ -1,7 +1,7 @@
-<head>easyOSINT</head>
+<h1>easyOSINT</h1>
 <img src=Capture60.PNG>
 <br>
-<h1>Description</h1>
+<h2>Description</h2>
 <p>OSINT (Open Source Intelligence) is widely used in various fields, including cybersecurity, law
 enforcement, corporate security, military operations, and journalism. The goal
 is to gather information that can help in decision-making, threat assessment,
