@@ -15,6 +15,7 @@ and strategic planning. This information can come from a wide variety of sources
 
 <h2>How it Works?</h2>
 <h3>Step 1:</h3>
+<h4>Test Locally</h4>
 <p>Run the following command in your terminal:</p>
 
 >git clone <repository_name.git><br>
@@ -50,4 +51,7 @@ and strategic planning. This information can come from a wide variety of sources
         <li>click search</li>
     </ul>
 </ol>
-
+<br>
+<h3>Step 3:</h3>
+<h5>Test online on:</h5>
+<a href="https://easy-osint.vercel.app/" target="blank">easyOSINT</a>
