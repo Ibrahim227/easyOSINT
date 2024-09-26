@@ -7,11 +7,11 @@
 enforcement, corporate security, military operations, and journalism. The goal
 is to gather information that can help in decision-making, threat assessment,
 and strategic planning. This information can come from a wide variety of sources, including:</p><br>
-1. Online Publications and Media
-2. Social Media
-3. Public Databases and Government Reports
-4. Internet Forums and Communities
-5. Corporate Websites, etc…
+1. Online Publications and Media<br>
+2. Social Media<br>
+3. Public Databases and Government Reports<br>
+4. Internet Forums and Communities<br>
+5. Corporate Websites, etc…<br>
 
 <h2>How it Works?</h2>
 <h3>Step 1:</h3>
