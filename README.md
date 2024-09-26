@@ -1,5 +1,6 @@
 <h1>easyOSINT</h1>
 <img src=Capture60.PNG>
+<img src="Capture61.PNG">
 <br>
 <h2>Description</h2>
 <p>OSINT (Open Source Intelligence) is widely used in various fields, including cybersecurity, law
