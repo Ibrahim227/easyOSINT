@@ -43,6 +43,7 @@ and strategic planning. This information can come from a wide variety of sources
     <li>To Search for country</li>
     <ul>
         <li>click on filter and choose <strong>Country</strong></li>
+        <img src="Capture62.PNG">
         <li>Enter the country name in the search bar</li>
         <img src="Capture63.PNG">
         <li>click search</li>
