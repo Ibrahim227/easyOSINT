@@ -10,12 +10,14 @@ from datetime import datetime, timedelta
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
+
 # Third-party libraries
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
 from flask_login import LoginManager
 from oauthlib.oauth2 import WebApplicationClient
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
+
 # Internal imports
 from api.db import init_db_command, get_db
 from api.user import User
