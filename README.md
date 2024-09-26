@@ -16,9 +16,12 @@ and strategic planning. This information can come from a wide variety of sources
 <h3>Step 1:</h3>
 <p>Run the following command in your terminal:</p>
 
->python3 wsgi.py
+>git clone <repository_name.git>
+> cd <repository_name>
+> python3 wsgi.py
 
 <br>
+<p>You will see:</p>
 
 >click on <http://localhost:5000>
 
