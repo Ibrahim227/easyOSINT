@@ -283,7 +283,20 @@ main {
     margin: 0;
     padding: 0;
 }
-
+.scrollable-section .country {
+    list-style: none;
+    display: flex;
+    margin: 5px;
+}
+.scrollable-section .country li {
+    border-left: 1px thin #2c323d;
+}
+.scrollable-section .result h3 {
+    background-color: lightgray;
+}
+.scrollable-section .result h4 {
+    margin: 5px;
+}
 /* Hidden form UI */
 .person-form {
     display: flex;
