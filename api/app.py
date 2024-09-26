@@ -5,6 +5,8 @@ import os
 # Import python standard lib
 import sqlite3
 from uuid import uuid4
+import random
+from datetime import datetime, timedelta
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
@@ -385,6 +387,30 @@ def searchCountry():
         conn.commit()
 
     return render_template('index.html', country_results=country_results)
+
+
+@app.route('/api/get-stock-data', methods=['GET'])
+def get_stock_data():
+    # Get current time and generate a time series with random stock price data
+    now = datetime.now()
+    time_format = '%Y-%m-%d %H:%M'
+
+    # Generate timestamps for the last 3 updates (every hour)
+    timestamps = [
+                     (now.replace(minute=0, second=0) - timedelta(hours=i)).strftime(time_format)
+                     for i in range(3)
+                 ][::-1]  # Reverse so the latest is last
+
+    # Generate random stock prices with some fluctuation
+    stock_data = {
+        'timestamps': timestamps,
+        'eu': [random.randint(3500, 3550) for _ in range(3)],
+        'wallstreet': [random.randint(15000, 15500) for _ in range(3)],
+        'london': [random.randint(7000, 7100) for _ in range(3)],
+        'china': [random.randint(5000, 5200) for _ in range(3)]
+    }
+
+    return jsonify(stock_data)
 
 
 # Logout Route
