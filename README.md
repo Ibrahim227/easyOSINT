@@ -1,5 +1,5 @@
 <head>easyOSINT</head>
-<img src=Capture60.png>
+<img src=Capture60.PNG>
 <br>
 <h1>Description</h1>
 <p>OSINT (Open Source Intelligence) is widely used in various fields, including cybersecurity, law
@@ -23,15 +23,26 @@ and strategic planning. This information can come from a wide variety of sources
 >click on <http://localhost:5000>
 
 <br>
-<img src="Capture60.png">
+<img src="Capture60.PNG">
 
 <h3>Step 2:</h3>
 <ol>
-    <p>Enter a search query</p>
-    <p>click search to see results</p>
-    <p>To search for a social media account:</p>
+    <li>Enter a search query</li>
+    <li>click search to see results</li>
+    <li>To search for a social media account:</li>
     <ul>
+        <li>click on filter and choose <strong>Person</strong></li>
+        <img src="Capture62.PNG">
         <li>Enter the username</li>
+        <img src="Capture64.PNG">
+        <li>click search</li>
+    </ul>
+    <li>To Search for country</li>
+    <ul>
+        <li>click on filter and choose <strong>Country</strong></li>
+        <li>Enter the country name in the search bar</li>
+        <img src="Capture63.PNG">
         <li>click search</li>
     </ul>
 </ol>
+
