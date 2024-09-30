@@ -438,13 +438,17 @@ def upload_profile():
         flash('No selected file.')
         return redirect(request.referrer)
 
-    if not file:
-        pass
-    else:  # conn.close()
+    if file:  # conn.close()
         # Save the file with the user's user_id
-        filename = f"{session['user_id']}_profile.png"
+        filename = f"{session['user_id']}.png"
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
+
+        # Debugging
+        if os.path.exists(file_path):
+            print(f"File saved successfully at: {file_path}")
+        else:
+            print("Error: File was not saved.")
 
         # Update session with the new profile image path
         session['profile_img'] = f"/static/uploads/{filename}"
@@ -460,6 +464,8 @@ def upload_profile():
             flash('Profile picture updated successfully.')
         except Exception as e:
             flash(f'Error updating profile picture: {str(e)}')
+        finally:
+            conn.close()
 
     return redirect(request.referrer)
 
