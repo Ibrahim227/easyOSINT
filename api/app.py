@@ -2,28 +2,27 @@
     Import required Module/Lib
 """
 import os
+import random
 # Import python standard lib
 import sqlite3
-from uuid import uuid4
-import random
 from datetime import datetime, timedelta
+from uuid import uuid4
 
+import requests
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
-
 # Third-party libraries
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
 from flask_login import LoginManager
 from oauthlib.oauth2 import WebApplicationClient
 from werkzeug.security import generate_password_hash, check_password_hash
-import requests
 
 # Internal imports
 from api.db import init_db_command, get_db
-from api.user import User
 from api.search import SearchModel
-from api.searchSocial import SocialModel
 from api.searchCountry import CountryModel
+from api.searchSocial import SocialModel
+from api.user import User
 
 # load env variables
 load_dotenv()
@@ -34,6 +33,12 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 # OAuth setup
 oauth = OAuth(app)
+
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static/uploads/')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 
 # Register Google OAuth
 google = oauth.register(
@@ -413,6 +418,50 @@ def get_stock_data():
     }
 
     return jsonify(stock_data)
+
+
+# Route to handle profile image upload
+@app.route('/upload_profile', methods=['POST'])
+def upload_profile():
+    # Check if a user is logged in and has user_id in session
+    if 'user_id' not in session:
+        flash('You must be logged in to upload a profile picture.')
+        return redirect(url_for('user_login'))
+
+        # Handle file upload
+    if 'profile-img' not in request.files:
+        flash('No file part in the request.')
+        return redirect(request.referrer)
+
+    file = request.files['profile-img']
+    if file.filename == '':
+        flash('No selected file.')
+        return redirect(request.referrer)
+
+    if not file:
+        pass
+    else:  # conn.close()
+        # Save the file with the user's user_id
+        filename = f"{session['user_id']}_profile.png"
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+
+        # Update session with the new profile image path
+        session['profile_img'] = f"/static/uploads/{filename}"
+        # Save the new profile image path in the database
+        try:
+            conn = get_db()
+            cursor = conn.cursor()
+
+            # Update the user's profile picture in the database
+            cursor.execute("UPDATE user SET profile_pic = ? WHERE id = ?", (session['profile_img'], session['user_id']))
+            conn.commit()
+
+            flash('Profile picture updated successfully.')
+        except Exception as e:
+            flash(f'Error updating profile picture: {str(e)}')
+
+    return redirect(request.referrer)
 
 
 # Logout Route
