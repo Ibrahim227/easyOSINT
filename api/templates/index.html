@@ -30,12 +30,11 @@
 
         <!-- Conditional rendering based on whether the user is logged in -->
          <div class="auth-section">
-
              {% if session['logged_in'] %}
                  <!-- Profile Image -->
                  <div class="profile-image">
                      <label for="profile-upload">
-                         <img src="{{ session['profile_img'] or '../static/img/profile.png' }}" alt="Profile" id="profile-pic">
+                         <img src="{{ session['profile_img'] }}" alt="Profile Picture" id="profile-pic">
                      </label>
                     <!-- Hidden file input for uploading profile image -->
                     <form action="/upload_profile" method="POST" enctype="multipart/form-data">
