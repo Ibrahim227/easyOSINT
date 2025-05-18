@@ -67,8 +67,16 @@
     }
 
  /* Search form ui*/
+#main-search-bar {
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
 
-      #search-form input {
+#main-search-bar.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#search-form input {
     min-width: 250px;
     gap: 15px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -96,15 +104,61 @@
       }
     }
 
+/* Filter-form style */
+.filter-form-styleImageAnalysis {
+    display: flex;
+    width: 100%;
+    height: 50vh;
+    justify-content: left;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0 0 400px;
+}
+.filter-form-styleCountry {
+    display: flex;
+    width: 100px;
+    height: 50vh;
+    justify-content: left;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0 0 400px;
+}
+.filter-form-styleUsername {
+    display: flex;
+    width: 100%;
+    height: 50vh;
+    justify-content: left;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0 0 400px;
+}
+.filter-form-styleIP {
+    display: flex;
+    width: 100%;
+    height: 50vh;
+    justify-content: left;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0 0 400px;
+}
 /* Footer styling */
 .footer {
   background-color: #f8f9fa;
   border-top: 1px solid #e1e1e1;
   color: #212529;
+  z-index: 999;
 }
 footer.footer {
   position: relative;
-  z-index: 999;
+
 }
 .footer a.footer-link {
   color: #007BFF;
