@@ -68,11 +68,10 @@
     <!-- Page Content -->
     <div class="container mt-5 pt-4">
       <div id="main-page" class="page-section">
-        <h1>Welcome to <i>easyOSINT</i></h1>
         <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
           <div class="row w-100 justify-content-center">
                 <!-- SEARCH + FILTER ROW -->
-                <div class="col-md-8 d-flex justify-content-center align-items-center flex-wrap">
+                <div class="col-md-8 d-flex justify-content-center align-items-center flex-wrap" id="main-search-bar">
                     <form id="search-form" class="form-inline" method="POST" action="/search">
                         <div class="input-group">
                             <input type="text" name="query" class="form-control" placeholder="Search..." required>
@@ -90,10 +89,10 @@
                             <i class="fas fa-filter"></i> Filter By
                         </button>
                         <div class="dropdown-menu" aria-labelledby="filterDropdown">
-                            <a class="dropdown-item filter-option" data-filter="image-analysis"><i class="fas fa-image mr-2"></i>Image Analysis</a>
-                            <a class="dropdown-item filter-option" data-filter="country"><i class="fas fa-flag mr-2"></i>Country</a>
-                            <a class="dropdown-item filter-option" data-filter="username"><i class="fas fa-user mr-2"></i>Username Lookup</a>
-                            <a class="dropdown-item filter-option" data-filter="ip"><i class="fas fa-network-wired mr-2"></i>IP Lookup</a>
+                          <a class="dropdown-item filter-option" data-filter="image-analysis"><i class="fas fa-image mr-2"></i>Image Analysis</a>
+                          <a class="dropdown-item filter-option" data-filter="country"><i class="fas fa-flag mr-2"></i>Country</a>
+                          <a class="dropdown-item filter-option" data-filter="username"><i class="fas fa-user mr-2"></i>Username Lookup</a>
+                          <a class="dropdown-item filter-option" data-filter="ip"><i class="fas fa-network-wired mr-2"></i>IP Lookup</a>
                         </div>
                     </div>
                 </div>
@@ -189,7 +188,6 @@
       </div>
     </footer>
 
-
   <!-- JS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -257,82 +255,99 @@
   <!-- script for filter-forms in the page content -->
   <script>
     const filterForms = {
-        "image-analysis": `
-            <div class="col-md-8">
-                <form action="/analyze_image" method="POST" enctype="multipart/form-data" id="image-analysis-form">
-                    <div class="form-group">
-                        <label for="photo-files">Upload Photo(s)</label>
-                        <input type="file" class="form-control-file" id="photo-files" name="photos" accept="image/*" multiple required>
-                    </div>
-                    <div id="image-preview" class="d-flex flex-wrap mb-3"></div>
-                    <button type="submit" class="btn btn-success">Analyze</button>
-                    <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
-                </form>
-            </div>
-        `,
-        "country": `
-            <div class="col-md-6">
-                <form action="/searchCountry" method="POST">
-                    <div class="form-group">
-                        <label for="country-query">Country</label>
-                        <input type="text" name="query" class="form-control" placeholder="Enter country name" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Search</button>
-                    <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
-                </form>
-            </div>
-        `,
-        "username": `
-            <div class="col-md-6">
-                <form action="/searchUsername" method="POST">
-                    <div class="form-group">
-                        <label for="username-query">Username</label>
-                        <input type="text" name="query" class="form-control" placeholder="Enter username" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Search</button>
-                    <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
-                </form>
-            </div>
-        `,
-        "ip": `
-            <div class="col-md-6">
-                <form action="/searchIP" method="POST">
-                    <div class="form-group">
-                        <label for="ip-query">IP Address</label>
-                        <input type="text" name="query" class="form-control" placeholder="Enter IP address" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Search</button>
-                    <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
-                </form>
-            </div>
-        `
+    "image-analysis": `
+        <div class="col-md-8">
+            <form action="/analyze_image" method="POST" class="filter-form-styleImageAnalysis" enctype="multipart/form-data" id="image-analysis-form">
+                <div class="form-group">
+                    <label for="photo-files">Upload Photo(s)</label>
+                    <input type="file" class="form-control-file" id="photo-files" name="photos" accept="image/*" multiple required>
+                </div>
+                <div id="image-preview" class="d-flex flex-wrap mb-3"></div>
+                <button type="submit" class="btn btn-success">Analyze</button>
+                <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
+            </form>
+        </div>
+    `,
+    "country": `
+        <div class="col-md-6">
+            <form action="/searchCountry" method="POST" class="filter-form-styleCountry">
+                <div class="form-group">
+                    <label for="country-query">Country</label>
+                    <input type="text" name="query" class="form-control" placeholder="Enter country name" required>
+                </div>
+                <button type="submit" class="btn btn-success">Search</button>
+                <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
+            </form>
+        </div>
+    `,
+    "username": `
+        <div class="col-md-6">
+            <form action="/searchUsername" method="POST" class="filter-form-styleUsername">
+                <div class="form-group">
+                    <label for="username-query">Username</label>
+                    <input type="text" name="query" class="form-control" placeholder="Enter username" required>
+                </div>
+                <button type="submit" class="btn btn-success">Search</button>
+                <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
+            </form>
+        </div>
+    `,
+    "ip": `
+        <div class="col-md-6">
+            <form action="/searchIP" method="POST" class="filter-form-styleIP">
+                <div class="form-group">
+                    <label for="ip-query">IP Address</label>
+                    <input type="text" name="query" class="form-control" placeholder="Enter IP address" required>
+                </div>
+                <button type="submit" class="btn btn-success">Search</button>
+                <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
+            </form>
+        </div>`
     };
-
+  </script>
+  <script>
     $(document).ready(function () {
-        $('.filter-option').click(function () {
-            const selectedFilter = $(this).data('filter');
-            $('#filter-forms').html(filterForms[selectedFilter]);
-        });
+      // Handle filter selection
+      $('.filter-option').on('click', function () {
+        const selectedFilter = $(this).data('filter');
+        console.log("Filter clicked:", selectedFilter);
 
-        $('#filter-forms').on('change', '#photo-files', function () {
-            const preview = $('#image-preview');
-            preview.empty();
-            const files = this.files;
-            if (files) {
-                [...files].forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const img = $('<img>').attr('src', e.target.result).addClass('img-thumbnail m-1').css({width: '150px', height: 'auto'});
-                        preview.append(img);
-                    }
-                    reader.readAsDataURL(file);
-                });
+        // Inject the corresponding form
+        $('#filter-forms').html(filterForms[selectedFilter]);
+
+        // Make sure #main-search-bar is visible and then hide it
+        if ($('#main-search-bar').length) {
+          console.log("Hiding #main-search-bar...");
+          $('#main-search-bar').hide(); // or use .css('display', 'none')
+        } else {
+          console.warn("#main-search-bar not found");
+        }
+      });
+
+      // Handle cancel button
+      $('#filter-forms').on('click', '.cancel-filter', function () {
+        $('#filter-forms').empty();
+        $('#main-search-bar').show(); // Restore search bar on cancel
+      });
+
+      // Image preview handler
+      $('#filter-forms').on('change', '#photo-files', function () {
+        const preview = $('#image-preview');
+        preview.empty();
+        const files = this.files;
+        if (files) {
+          [...files].forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const img = $('<img>').attr('src', e.target.result)
+                                    .addClass('img-thumbnail m-1')
+                                    .css({ width: '150px', height: 'auto' });
+              preview.append(img);
             }
-        });
-
-        $('#filter-forms').on('click', '.cancel-filter', function () {
-            $('#filter-forms').empty();
-        });
+            reader.readAsDataURL(file);
+          });
+        }
+      });
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
