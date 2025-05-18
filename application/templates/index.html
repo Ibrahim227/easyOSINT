@@ -9,7 +9,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../static/img/logo_trial.png" rel="icon" type="image/x-icon">
     <link rel="stylesheet" href="../static/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -147,104 +146,6 @@
             {% endif %}
         </section>
 
-        <!-- Dashboard Search Section -->
-        <section class="scrollable-section">
-            <h2><i class="fas fa-tachometer-alt"></i> DASHBOARD</h2>
-            <div class="graphic">
-                <canvas id="disp-data"></canvas>
-                <script>
-                    // Initialize the chart globally
-                    let chart;
-
-                    // Function to fetch stock data from your backend
-                    async function fetchStockData() {
-                        const response = await fetch('/api/get-stock-data');
-                        const stockData = await response.json();
-                        return stockData;
-                    }
-
-                    // Function to generate the chart using Chart.js
-                    function generateChart(stockData) {
-                        const ctx = document.getElementById('disp-data').getContext('2d');
-
-                        chart = new Chart(ctx, {
-                            type: 'line', // Line chart for stock data
-                            data: {
-                                labels: stockData.timestamps, // X-axis labels (time)
-                                datasets: [
-                                    {
-                                        label: 'EU',
-                                        data: stockData.eu, // Y-axis data for EU
-                                        borderColor: 'rgba(75, 192, 192, 1)',
-                                        fill: false
-                                    },
-                                    {
-                                        label: 'Wall Street',
-                                        data: stockData.wallstreet, // Y-axis data for Wall Street
-                                        borderColor: 'rgba(255, 99, 132, 1)',
-                                        fill: false
-                                    },
-                                    {
-                                        label: 'London',
-                                        data: stockData.london, // Y-axis data for London
-                                        borderColor: 'rgba(54, 162, 235, 1)',
-                                        fill: false
-                                    },
-                                    {
-                                        label: 'China',
-                                        data: stockData.china, // Y-axis data for China
-                                        borderColor: 'rgba(153, 102, 255, 1)',
-                                        fill: false
-                                    }
-                                ]
-                            },
-                            options: {
-                                responsive: true,
-                                scales: {
-                                    x: {
-                                        title: {
-                                            display: true,
-                                            text: 'Time'
-                                        }
-                                    },
-                                    y: {
-                                        title: {
-                                            display: true,
-                                            text: 'Stock Price'
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    // Function to update the chart with new data
-                    async function updateChart() {
-                        const stockData = await fetchStockData();
-
-                        if (chart) {
-                            // Update chart data
-                            chart.data.labels = stockData.timestamps;
-                            chart.data.datasets[0].data = stockData.eu;
-                            chart.data.datasets[1].data = stockData.wallstreet;
-                            chart.data.datasets[2].data = stockData.london;
-                            chart.data.datasets[3].data = stockData.china;
-                            chart.update();
-                        } else {
-                            // If the chart doesn't exist, generate it
-                            generateChart(stockData);
-                        }
-                    }
-
-                    // Update the chart every 30-second
-                    setInterval(updateChart, 30000);
-
-                    // Initially fetch and render the chart
-                    updateChart();
-                </script>
-
-            </div>
-        </section>
 
         <!-- Social Media Search Section -->
         <section class="scrollable-section" id="social">

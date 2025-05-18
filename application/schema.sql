@@ -8,7 +8,7 @@ CREATE TABLE user (
 
 CREATE TABLE search_history (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    user_id TEXT NOT NULL,
     query TEXT NOT NULL,
     result TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

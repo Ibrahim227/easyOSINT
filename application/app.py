@@ -16,11 +16,11 @@ from oauthlib.oauth2 import WebApplicationClient
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Internal imports
-from api.db import init_db_command, get_db
-from api.search import SearchModel
-from api.searchCountry import CountryModel
-from api.searchSocial import SocialModel
-from api.user import User
+from app.db import init_db_command, get_db
+from app.search import SearchModel
+from app.searchCountry import CountryModel
+from app.searchSocial import SocialModel
+from app.user import User
 
 # load env variables
 load_dotenv()
@@ -394,7 +394,7 @@ def searchCountry():
     return render_template('index.html', country_results=country_results)
 
 #
-# @app.route('/api/get-stock-data', methods=['GET'])
+# @app.route('/app/get-stock-data', methods=['GET'])
 # def get_stock_data():
 #     # Get current time and generate a time series with random stock price data
 #     now = datetime.now()

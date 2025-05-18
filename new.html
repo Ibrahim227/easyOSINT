@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>easyOSINT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../static/img/logo_trial.png" rel="icon" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="newstyle.css">
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar hidden">
+
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link" href="#" data-target="main-page"><i class="fas fa-home"></i> Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="#" data-target="sources-page"><i class="fas fa-database"></i> Sources</a></li>
+      <li class="nav-item"><a class="nav-link" href="#" data-target="intelligence-page"><i class="fas fa-brain"></i> Intelligence</a></li>
+      <li class="nav-item"><a class="nav-link" href="#" data-target="history-page"><i class="fas fa-history"></i> History</a></li>
+      <li class="nav-item"><a class="nav-link" href="#" data-target="settings-page"><i class="fas fa-cog"></i> Settings</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content full">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <a class="navbar-brand" href="#">
+          <!-- Add this inside your navbar or header -->
+        <div class="logo-container">
+          <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#007BFF" viewBox="0 0 24 24">
+            <path d="M12 2a10 10 0 1 0 6.32 17.77l3.18 3.18 1.41-1.41-3.18-3.18A10 10 0 0 0 12 2zm1 17.93A8 8 0 1 1 20 12a8 8 0 0 1-7 7.93z"/>
+            <circle cx="12" cy="12" r="4" fill="#007BFF"/>
+          </svg>
+          <span class="logo-text"><strong>easy</strong>OSINT</span>
+        </div>
+
+      </a>
+
+      <div class="nav-center d-none d-lg-block">
+        <a class="nav-link d-inline" href="#" data-target="main-page">Home</a>
+        <a class="nav-link d-inline" href="#" data-target="sources-page">Sources</a>
+        <a class="nav-link d-inline" href="#" data-target="intelligence-page">Intelligence</a>
+      </div>
+
+      <button class="btn btn-outline-secondary ml-auto" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <div class="dropdown ml-2">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown">
+          <i class="fas fa-user-circle"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+          <a class="dropdown-item" href="#" data-target="signup-page"><i class="fas fa-user-plus"></i> Sign Up</a>
+          <a class="dropdown-item" href="#" data-target="login-page"><i class="fas fa-sign-in-alt"></i> Login</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#" data-target="settings-page"><i class="fas fa-cogs"></i> Settings</a>
+        </div>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container mt-5 pt-4">
+      <div id="main-page" class="page-section">
+        <h1>Welcome to <i>easyOSINT</i></h1>
+        <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+          <div class="row w-100 justify-content-center">
+                <!-- SEARCH + FILTER ROW -->
+                <div class="col-md-8 d-flex justify-content-center align-items-center flex-wrap">
+                    <form id="search-form" class="form-inline" method="POST" action="/search">
+                        <div class="input-group">
+                            <input type="text" name="query" class="form-control" placeholder="Search..." required>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Filter Dropdown to the right -->
+                    <div class="dropdown ml-3 mt-2 mt-md-0">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-filter"></i> Filter By
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="filterDropdown">
+                            <a class="dropdown-item filter-option" data-filter="image-analysis"><i class="fas fa-image mr-2"></i>Image Analysis</a>
+                            <a class="dropdown-item filter-option" data-filter="country"><i class="fas fa-flag mr-2"></i>Country</a>
+                            <a class="dropdown-item filter-option" data-filter="username"><i class="fas fa-user mr-2"></i>Username Lookup</a>
+                            <a class="dropdown-item filter-option" data-filter="ip"><i class="fas fa-network-wired mr-2"></i>IP Lookup</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Filter Forms (appear below) -->
+                <div id="filter-forms" class="col-md-12 mt-4 d-flex justify-content-center">
+                    <!-- Forms will be injected here -->
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div id="sources-page" class="page-section d-none">
+        <h1>Sources</h1>
+        <p>Information on available sources.</p>
+      </div>
+
+      <div id="intelligence-page" class="page-section d-none">
+        <h1>Intelligence</h1>
+        <p>Details about intelligence data and processing.</p>
+      </div>
+
+      <div id="history-page" class="page-section d-none">
+        <h1>History</h1>
+        <p>Your history of searches and activities.</p>
+      </div>
+
+      <div id="settings-page" class="page-section d-none">
+        <div class="settings-section">
+          <h4><i class="fas fa-cogs"></i> General Settings</h4>
+          <div class="form-group">
+            <label for="darkModeSwitch">Dark Mode</label>
+            <input type="checkbox" id="darkModeSwitch">
+          </div>
+          <div class="form-group">
+            <label>Image Format</label>
+            <select class="form-control" id="imageFormat">
+              <option>JPG</option>
+              <option>PNG</option>
+              <option>WebP</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Data Refresh Interval</label>
+            <input type="number" class="form-control" id="refreshRate" placeholder="Seconds">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Footer -->
+    <footer class="footer mt-5 py-4 bg-light text-dark">
+      <div class="container">
+        <div class="row align-items-center">
+          <!-- Logo -->
+          <div class="col-md-3 text-center text-md-left mb-3 mb-md-0">
+            <div class="footer-logo d-flex align-items-center justify-content-center justify-content-md-start">
+              <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#007BFF" viewBox="0 0 24 24">
+                <path d="M12 2a10 10 0 1 0 6.32 17.77l3.18 3.18 1.41-1.41-3.18-3.18A10 10 0 0 0 12 2zm1 17.93A8 8 0 1 1 20 12a8 8 0 0 1-7 7.93z"/>
+                <circle cx="12" cy="12" r="4" fill="#007BFF"/>
+              </svg>
+              <span class="logo-text ml-2"><strong>easy</strong>OSINT</span>
+            </div>
+          </div>
+
+          <!-- Links -->
+          <div class="col-md-6 text-center mb-3 mb-md-0">
+            <a href="#" class="footer-link mx-2">Privacy Policy</a>
+            <a href="#" class="footer-link mx-2">Terms of Use</a>
+            <a href="#" class="footer-link mx-2">Contact Us</a>
+          </div>
+
+          <!-- Info + Social -->
+          <div class="col-md-3 text-center text-md-right">
+            <small>
+              <strong>OSINT Tips:</strong> Verify sources, stay ethical,<br>
+              and use secure environments for reconnaissance.
+            </small>
+            <div class="social-icons mt-2">
+              <a href="https://twitter.com" target="_blank" class="mx-1 social-link"><i class="fab fa-twitter"></i></a>
+              <a href="https://facebook.com" target="_blank" class="mx-1 social-link"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://linkedin.com" target="_blank" class="mx-1 social-link"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://github.com" target="_blank" class="mx-1 social-link"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+        <hr class="my-3">
+        <div class="text-center small">
+          &copy; 2025 easyOSINT. All rights reserved.
+        </div>
+      </div>
+    </footer>
+
+
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Sidebar Toggle
+    $('#menu-toggle').click(function () {
+      $('#sidebar').toggleClass('hidden');
+      $('.content').toggleClass('full');
+    });
+
+    // Show selected section
+    function showSection(sectionId) {
+      document.querySelectorAll('.page-section').forEach(el => el.classList.add('d-none'));
+      document.getElementById(sectionId).classList.remove('d-none');
+      localStorage.setItem('lastSection', sectionId);
+    }
+
+    // Load settings on page load
+    window.onload = function () {
+      const lastSection = localStorage.getItem('lastSection') || 'main-page';
+      showSection(lastSection);
+
+      // Hook up navigation links
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function (e) {
+          const target = this.getAttribute('data-target');
+          if (target) {
+            e.preventDefault();
+            showSection(target);
+          }
+        });
+      });
+
+      // Dark mode settings
+      const darkModeSwitch = document.getElementById('darkModeSwitch');
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        darkModeSwitch.checked = true;
+      }
+
+      darkModeSwitch.addEventListener('change', function () {
+        const isChecked = this.checked;
+        if (isChecked) {
+          document.body.classList.add('dark-mode');
+          localStorage.setItem('darkMode', 'enabled');
+        } else {
+          document.body.classList.remove('dark-mode');
+          localStorage.setItem('darkMode', 'disabled');
+        }
+      });
+
+      // Load other settings
+      document.getElementById('refreshRate').value = localStorage.getItem('refreshRate') || '';
+      document.getElementById('imageFormat').value = localStorage.getItem('imageFormat') || 'JPG';
+
+      document.getElementById('refreshRate').addEventListener('input', function () {
+        localStorage.setItem('refreshRate', this.value);
+      });
+
+      document.getElementById('imageFormat').addEventListener('change', function () {
+        localStorage.setItem('imageFormat', this.value);
+      });
+    };
+  </script>
+  <!-- script for filter-forms in the page content -->
+  <script>
+    const filterForms = {
+        "image-analysis": `
+            <div class="col-md-8">
+                <form action="/analyze_image" method="POST" enctype="multipart/form-data" id="image-analysis-form">
+                    <div class="form-group">
+                        <label for="photo-files">Upload Photo(s)</label>
+                        <input type="file" class="form-control-file" id="photo-files" name="photos" accept="image/*" multiple required>
+                    </div>
+                    <div id="image-preview" class="d-flex flex-wrap mb-3"></div>
+                    <button type="submit" class="btn btn-success">Analyze</button>
+                    <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
+                </form>
+            </div>
+        `,
+        "country": `
+            <div class="col-md-6">
+                <form action="/searchCountry" method="POST">
+                    <div class="form-group">
+                        <label for="country-query">Country</label>
+                        <input type="text" name="query" class="form-control" placeholder="Enter country name" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Search</button>
+                    <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
+                </form>
+            </div>
+        `,
+        "username": `
+            <div class="col-md-6">
+                <form action="/searchUsername" method="POST">
+                    <div class="form-group">
+                        <label for="username-query">Username</label>
+                        <input type="text" name="query" class="form-control" placeholder="Enter username" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Search</button>
+                    <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
+                </form>
+            </div>
+        `,
+        "ip": `
+            <div class="col-md-6">
+                <form action="/searchIP" method="POST">
+                    <div class="form-group">
+                        <label for="ip-query">IP Address</label>
+                        <input type="text" name="query" class="form-control" placeholder="Enter IP address" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Search</button>
+                    <button type="button" class="btn btn-danger cancel-filter">Cancel</button>
+                </form>
+            </div>
+        `
+    };
+
+    $(document).ready(function () {
+        $('.filter-option').click(function () {
+            const selectedFilter = $(this).data('filter');
+            $('#filter-forms').html(filterForms[selectedFilter]);
+        });
+
+        $('#filter-forms').on('change', '#photo-files', function () {
+            const preview = $('#image-preview');
+            preview.empty();
+            const files = this.files;
+            if (files) {
+                [...files].forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const img = $('<img>').attr('src', e.target.result).addClass('img-thumbnail m-1').css({width: '150px', height: 'auto'});
+                        preview.append(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+
+        $('#filter-forms').on('click', '.cancel-filter', function () {
+            $('#filter-forms').empty();
+        });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
